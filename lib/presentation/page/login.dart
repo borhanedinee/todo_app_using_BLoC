@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:todos/presentation/page/login.dart';
+import 'package:todos/main.dart';
+import 'package:todos/pallets/app_colors.dart';
+import 'package:todos/presentation/page/home_screen.dart';
 
 class LogIn extends StatelessWidget {
   const LogIn({super.key});
@@ -9,7 +11,7 @@ class LogIn extends StatelessWidget {
     return Scaffold(
       body: Column(
         children: [
-          SizedBox(
+          const SizedBox(
             height: 80,
           ),
           Container(
@@ -20,10 +22,11 @@ class LogIn extends StatelessWidget {
               ),
             ),
           ),
-          SizedBox(
+          const SizedBox(
             height: 40,
           ),
-          Form(
+          // Signup with google
+       Form(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -32,25 +35,25 @@ class LogIn extends StatelessWidget {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text('Email'),
-                      SizedBox(
+                      const Text('Email'),
+                      const SizedBox(
                         height: 5,
                       ),
                       TextFormField(
-                        decoration: InputDecoration(
+                        decoration: const InputDecoration(
                           border: OutlineInputBorder(),
                           hintText: 'Enter e-mail',
                         ),
                       ),
-                      SizedBox(
+                      const SizedBox(
                         height: 10,
                       ),
-                      Text('Password'),
-                      SizedBox(
+                      const Text('Password'),
+                      const SizedBox(
                         height: 5,
                       ),
                       TextFormField(
-                        decoration: InputDecoration(
+                        decoration: const InputDecoration(
                           hintText: 'Enter password',
                           border: OutlineInputBorder(),
                         ),
@@ -61,19 +64,88 @@ class LogIn extends StatelessWidget {
                 Padding(
                   padding: const EdgeInsets.only(left: 5),
                   child: TextButton(
-                      onPressed: () {}, child: Text('Forgot Passorwd?')),
+                      onPressed: () {}, child: const Text('Forgot Passorwd?')),
                 )
               ],
             ),
           ),
-          SizedBox(
-            height: 150,
+          const Center(
+            child: Text('or'),
+          ),
+          const SizedBox(
+            height: 10,
+          ),
+             Container(
+            margin: const EdgeInsets.symmetric(horizontal: 20),
+            width: size.width,
+            child: ElevatedButton(
+              onPressed: () {},
+              style: const ButtonStyle(
+                  padding: MaterialStatePropertyAll(
+                      EdgeInsets.symmetric(horizontal: 10)),
+                  backgroundColor: MaterialStatePropertyAll(
+                      AppColors.signUpWithGoogleButtonColor)),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  const Text(
+                    'Sign up with Google',
+                    style: TextStyle(color: Colors.black),
+                  ),
+                  const SizedBox(
+                    width: 10,
+                  ),
+                  Image.asset(
+                    'assets/images/google.png',
+                    height: 20,
+                  )
+                ],
+              ),
+            ),
+          ),
+          const SizedBox(
+            height: 10,
+          ),
+
+          Container(
+            margin: const EdgeInsets.symmetric(horizontal: 20),
+            width: size.width,
+            child: ElevatedButton(
+              onPressed: () {},
+              style: const ButtonStyle(
+                padding: MaterialStatePropertyAll(
+                    EdgeInsets.symmetric(horizontal: 10)),
+                backgroundColor: MaterialStatePropertyAll(
+                    AppColors.signUpWithGoogleButtonColor),
+              ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  const Text(
+                    'Sign up with Facebook',
+                    style: TextStyle(color: Colors.black),
+                  ),
+                  const SizedBox(
+                    width: 10,
+                  ),
+                  Image.asset(
+                    'assets/images/facebook.png',
+                    height: 20,
+                  )
+                ],
+              ),
+            ),
+          ),
+          const SizedBox(
+            height: 50,
           ),
           Container(
             width: MediaQuery.of(context).size.width,
             padding: const EdgeInsets.symmetric(horizontal: 20),
             child: ElevatedButton(
-              onPressed: () {},
+              onPressed: () {
+                Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => const HomeScreen(),));
+              },
               style: ButtonStyle(
                 padding: const MaterialStatePropertyAll(
                   EdgeInsets.symmetric(vertical: 20),
