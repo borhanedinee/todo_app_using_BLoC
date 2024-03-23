@@ -34,6 +34,7 @@ class TaskStatusItem extends StatelessWidget {
               child: Icon(
                 icon,
                 size: 30,
+                color: Colors.white,
               )),
           const SizedBox(
             width: 10,

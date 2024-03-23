@@ -10,6 +10,8 @@ class RecentTaskItem extends StatelessWidget {
   String subTitleTask;
 
   String taskTitle;
+  
+  Color progressColor;
 
   RecentTaskItem({
     super.key,
@@ -17,19 +19,20 @@ class RecentTaskItem extends StatelessWidget {
     required this.subTitleTask,
     required this.completionPercentage,
     required this.numberOfCompletedSubTasks,
+    required this.progressColor
   });
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.only(left: 10, right: 10, top: 10, bottom: 10),
+      padding: const EdgeInsets.only(left: 12, right: 12, top: 10, bottom: 10),
       height: 100,
       width: size.width,
-      margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+      margin: const EdgeInsets.only(left: 15 , right: 15, bottom: 5 , top: 5),
       decoration: BoxDecoration(
         color: Colors.grey.shade900,
         borderRadius: BorderRadius.circular(20),
-        border: Border.all(color: Colors.white, width: 0.8),
+        border: Border.all(color: Colors.grey, width: 0.8),
       ),
       child: Row(
         children: [
@@ -85,6 +88,7 @@ class RecentTaskItem extends StatelessWidget {
           const Spacer(),
           SizedBox(
             child: CircularPercentIndicator(
+              progressColor: progressColor,
               radius: 28,
               lineWidth: 6,
               percent: completionPercentage,

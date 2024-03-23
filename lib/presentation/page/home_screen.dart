@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:todos/main.dart';
+import 'package:todos/pallets/app_colors.dart';
 import 'package:todos/presentation/page/components/custom_app_bar.dart';
 import 'package:todos/presentation/page/components/task_status_item.dart';
 import 'package:todos/presentation/page/components/recent_task_item.dart';
@@ -69,7 +70,7 @@ class HomeScreen extends StatelessWidget {
                                 icon: Icons.cancel_outlined,
                                 status: 'Canceled',
                                 numOfTasks: 3,
-                                color: Colors.redAccent,
+                                color: AppColors.primaryColor,
                               )
                             ],
                           ),
@@ -98,30 +99,35 @@ class HomeScreen extends StatelessWidget {
                       subTitleTask: 'Project of BRAINY',
                       completionPercentage: 0.3,
                       numberOfCompletedSubTasks: 12,
+                      progressColor: Colors.redAccent,
                     ),
                     RecentTaskItem(
                       taskTitle: 'studying ohoucine shit',
                       subTitleTask: 'PTT',
-                      completionPercentage: 0.1,
+                      completionPercentage: 0.9,
                       numberOfCompletedSubTasks: 8,
+                      progressColor: Colors.teal,
                     ),
                     RecentTaskItem(
                       taskTitle: 'Hamoudi Homework',
                       subTitleTask: 'Ptt',
                       completionPercentage: 0.7,
                       numberOfCompletedSubTasks: 10,
+                      progressColor: Colors.blue,
                     ),
                     RecentTaskItem(
                       taskTitle: 'Matering BloC',
                       subTitleTask: 'Flutter',
                       completionPercentage: 0.3,
                       numberOfCompletedSubTasks: 12,
+                      progressColor: Colors.yellow,
                     ),
                     RecentTaskItem(
                       taskTitle: 'Matering node js',
                       subTitleTask: 'Backend',
                       completionPercentage: 0.3,
                       numberOfCompletedSubTasks: 12,
+                      progressColor: Colors.redAccent,
                     ),
                   ],
                 )

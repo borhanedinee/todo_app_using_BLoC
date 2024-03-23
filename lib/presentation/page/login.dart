@@ -15,18 +15,32 @@ class LogIn extends StatelessWidget {
             height: 80,
           ),
           Container(
-            height: 100,
-            decoration: const BoxDecoration(
-              image: DecorationImage(
-                image: AssetImage('assets/images/todologo.png'),
-              ),
-            ),
-          ),
+              width: size.width,
+              padding: const EdgeInsets.symmetric(horizontal: 20),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const Text(
+                    'Create an account 🖐',
+                    style: TextStyle(
+                      fontSize: 26,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  const SizedBox(
+                    height: 10,
+                  ),
+                  Text(
+                    'Please register on our SteamLine, where you can continue using our services.',
+                    style: TextStyle(color: Colors.grey.shade300),
+                  )
+                ],
+              )),
           const SizedBox(
             height: 40,
           ),
           // Signup with google
-       Form(
+          Form(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -64,18 +78,43 @@ class LogIn extends StatelessWidget {
                 Padding(
                   padding: const EdgeInsets.only(left: 5),
                   child: TextButton(
-                      onPressed: () {}, child: const Text('Forgot Passorwd?')),
+                    onPressed: () {},
+                    child: const Text(
+                      'Forgot Passorwd?',
+                      style: TextStyle(color: Color.fromARGB(255, 250, 157, 140)),
+                    ),
+                  ),
                 )
               ],
             ),
           ),
-          const Center(
-            child: Text('or'),
+          Center(
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Container(
+                  width: 150,
+                  height: 1,
+                  color: Colors.grey,
+                  margin: const EdgeInsets.symmetric(horizontal: 10),
+                ),
+                const Text(
+                  'or',
+                  style: TextStyle(color: Colors.grey),
+                ),
+                Container(
+                  width: 150,
+                  height: 1,
+                  color: Colors.grey,
+                  margin: const EdgeInsets.symmetric(horizontal: 10),
+                ),
+              ],
+            ),
           ),
           const SizedBox(
             height: 10,
           ),
-             Container(
+          Container(
             margin: const EdgeInsets.symmetric(horizontal: 20),
             width: size.width,
             child: ElevatedButton(
@@ -144,12 +183,16 @@ class LogIn extends StatelessWidget {
             padding: const EdgeInsets.symmetric(horizontal: 20),
             child: ElevatedButton(
               onPressed: () {
-                Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => const HomeScreen(),));
+                Navigator.of(context).pushReplacement(MaterialPageRoute(
+                  builder: (context) => const HomeScreen(),
+                ));
               },
               style: ButtonStyle(
                 padding: const MaterialStatePropertyAll(
                   EdgeInsets.symmetric(vertical: 20),
                 ),
+                backgroundColor:
+                    const MaterialStatePropertyAll(AppColors.primaryColor),
                 elevation: const MaterialStatePropertyAll(5),
                 shape: MaterialStatePropertyAll(
                   RoundedRectangleBorder(
@@ -157,7 +200,11 @@ class LogIn extends StatelessWidget {
                   ),
                 ),
               ),
-              child: const Text('Login'),
+              child: const Text(
+                'Login',
+                style:
+                    TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+              ),
             ),
           ),
           const SizedBox(
