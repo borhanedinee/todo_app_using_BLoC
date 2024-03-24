@@ -58,7 +58,7 @@ class _TaskDetailsScreenState extends State<TaskDetailsScreen> {
                         child: Text(
                           widget.taskTitle,
                           style: const TextStyle(
-                            fontSize: 20,
+                            fontSize: 26,
                             fontWeight: FontWeight.bold,
                           ),
                         ),

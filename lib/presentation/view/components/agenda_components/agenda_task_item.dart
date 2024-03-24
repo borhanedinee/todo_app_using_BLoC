@@ -3,10 +3,8 @@ import 'package:percent_indicator/circular_percent_indicator.dart';
 import 'package:todos/main.dart';
 import 'package:todos/presentation/view/pages/task_details_screen.dart';
 
-class RecentTaskItem extends StatelessWidget {
+class AgendaTaskItem extends StatelessWidget {
   final double completionPercentage;
-
-  final int numberOfCompletedSubTasks;
 
   final String subTitleTask;
 
@@ -14,12 +12,11 @@ class RecentTaskItem extends StatelessWidget {
 
   final Color progressColor;
 
-  const RecentTaskItem(
+  const AgendaTaskItem(
       {super.key,
       required this.taskTitle,
       required this.subTitleTask,
       required this.completionPercentage,
-      required this.numberOfCompletedSubTasks,
       required this.progressColor});
 
   @override
@@ -30,7 +27,7 @@ class RecentTaskItem extends StatelessWidget {
           MaterialPageRoute(
             builder: (context) => TaskDetailsScreen(
               completionPercentage: completionPercentage,
-              numberOfCompletedSubTasks: numberOfCompletedSubTasks,
+              numberOfCompletedSubTasks: 8,
               progressColor: progressColor,
               subTitleTask: subTitleTask,
               taskTitle: taskTitle,
@@ -42,7 +39,7 @@ class RecentTaskItem extends StatelessWidget {
       child: Container(
         padding:
             const EdgeInsets.only(left: 12, right: 12, top: 10, bottom: 10),
-        height: 100,
+        height: 80,
         width: size.width,
         margin: const EdgeInsets.only(left: 15, right: 15, bottom: 5, top: 5),
         decoration: BoxDecoration(
@@ -54,7 +51,7 @@ class RecentTaskItem extends StatelessWidget {
           children: [
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
                 // TASK TITILE
                 SizedBox(
@@ -74,30 +71,7 @@ class RecentTaskItem extends StatelessWidget {
                   style: const TextStyle(color: Colors.white70),
                 ),
                 // COMPLETED SUBTAKS
-                Row(
-                  children: [
-                    CircleAvatar(
-                      radius: 11,
-                      backgroundColor: Colors.black,
-                      child: CircleAvatar(
-                        radius: 10,
-                        backgroundColor: Colors.yellow.shade200,
-                        child: const Icon(
-                          Icons.done_rounded,
-                          color: Colors.black,
-                          size: 13,
-                        ),
-                      ),
-                    ),
-                    const SizedBox(
-                      width: 5,
-                    ),
-                    Text(
-                      '$numberOfCompletedSubTasks tasks',
-                      style: const TextStyle(fontWeight: FontWeight.w500),
-                    )
-                  ],
-                ),
+                
               ],
             ),
             const Spacer(),

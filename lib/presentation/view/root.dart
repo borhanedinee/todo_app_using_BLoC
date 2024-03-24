@@ -16,7 +16,7 @@ class RootScreen extends StatefulWidget {
 class _RootScreenState extends State<RootScreen> {
   int currentIndex = 0;
 
-  List body = [const HomeScreen(), const AgendaScreen(), const StatsScreen(), const ProfileScreen()];
+  List body = [const HomeScreen(), AgendaScreen(), const StatsScreen(), const ProfileScreen()];
 
   @override
   Widget build(BuildContext context) {
