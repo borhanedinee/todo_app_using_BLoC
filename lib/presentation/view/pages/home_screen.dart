@@ -1,9 +1,10 @@
+import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
 import 'package:todos/main.dart';
 import 'package:todos/pallets/app_colors.dart';
-import 'package:todos/presentation/page/components/custom_app_bar.dart';
-import 'package:todos/presentation/page/components/task_status_item.dart';
-import 'package:todos/presentation/page/components/recent_task_item.dart';
+import 'package:todos/presentation/view/components/home_components/custom_app_bar.dart';
+import 'package:todos/presentation/view/components/home_components/task_status_item.dart';
+import 'package:todos/presentation/view/components/home_components/recent_task_item.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
@@ -19,7 +20,7 @@ class HomeScreen extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 // APP BAR
-                CustomAppBar(
+                const CustomAppBar(
                   user: 'Borhan',
                 ),
 
@@ -30,7 +31,7 @@ class HomeScreen extends StatelessWidget {
                     Container(
                       margin: const EdgeInsets.only(top: 30),
                       width: size.width,
-                      child: Column(
+                      child: const Column(
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
                           Row(
@@ -41,7 +42,7 @@ class HomeScreen extends StatelessWidget {
                                   status: 'On going',
                                   numOfTasks: 22,
                                   color: Colors.blue),
-                              const SizedBox(
+                              SizedBox(
                                 width: 10,
                               ),
                               TaskStatusItem(
@@ -52,7 +53,7 @@ class HomeScreen extends StatelessWidget {
                               )
                             ],
                           ),
-                          const SizedBox(
+                          SizedBox(
                             height: 10,
                           ),
                           Row(
@@ -63,7 +64,7 @@ class HomeScreen extends StatelessWidget {
                                   status: 'Completed',
                                   numOfTasks: 8,
                                   color: Colors.yellow),
-                              const SizedBox(
+                              SizedBox(
                                 width: 10,
                               ),
                               TaskStatusItem(
@@ -81,49 +82,65 @@ class HomeScreen extends StatelessWidget {
                       height: 15,
                     ),
                     //RECENT TASKSSSSSSSSSSSSSSS
-                    const Padding(
-                      padding: EdgeInsets.only(left: 20),
-                      child: Text(
-                        'Recent Tasks',
-                        style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 18,
-                            fontWeight: FontWeight.w500),
+                    Padding(
+                      padding: const EdgeInsets.only(left: 20, right: 20),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          const Text(
+                            'Recent Tasks',
+                            style: const TextStyle(
+                                color: Colors.white,
+                                fontSize: 18,
+                                fontWeight: FontWeight.w500),
+                          ),
+                          GestureDetector(
+                            onTap: () {
+                              showDropDown();
+                            },
+                            child: const Row(
+                              children: [
+                                Text('Sort by'),
+                                Icon(Icons.arrow_drop_down_sharp)
+                              ],
+                            ),
+                          )
+                        ],
                       ),
                     ),
                     const SizedBox(
                       height: 10,
                     ),
-                    RecentTaskItem(
+                    const RecentTaskItem(
                       taskTitle: 'Completing Ecommerce Project',
                       subTitleTask: 'Project of BRAINY',
                       completionPercentage: 0.3,
                       numberOfCompletedSubTasks: 12,
                       progressColor: Colors.redAccent,
                     ),
-                    RecentTaskItem(
+                    const RecentTaskItem(
                       taskTitle: 'studying ohoucine shit',
                       subTitleTask: 'PTT',
                       completionPercentage: 0.9,
                       numberOfCompletedSubTasks: 8,
                       progressColor: Colors.teal,
                     ),
-                    RecentTaskItem(
+                    const RecentTaskItem(
                       taskTitle: 'Hamoudi Homework',
                       subTitleTask: 'Ptt',
                       completionPercentage: 0.7,
                       numberOfCompletedSubTasks: 10,
                       progressColor: Colors.blue,
                     ),
-                    RecentTaskItem(
+                    const RecentTaskItem(
                       taskTitle: 'Matering BloC',
                       subTitleTask: 'Flutter',
                       completionPercentage: 0.3,
                       numberOfCompletedSubTasks: 12,
                       progressColor: Colors.yellow,
                     ),
-                    RecentTaskItem(
-                      taskTitle: 'Matering node js',
+                    const RecentTaskItem(
+                      taskTitle: 'Matesring node js',
                       subTitleTask: 'Backend',
                       completionPercentage: 0.3,
                       numberOfCompletedSubTasks: 12,
@@ -136,6 +153,30 @@ class HomeScreen extends StatelessWidget {
           ),
         ),
       ),
+    );
+  }
+
+  DropdownButton2 showDropDown() {
+    var categories = [
+      'Studying',
+      'Coding',
+      'Self dev',
+      '9adya',
+      'Meeting',
+      'Others'
+    ];
+    return DropdownButton2(
+      items: categories
+          .map((category) => DropdownMenuItem<String>(
+                value: category,
+                child: Text(
+                  category,
+                  style: const TextStyle(
+                    fontSize: 14,
+                  ),
+                ),
+              ))
+          .toList(),
     );
   }
 }

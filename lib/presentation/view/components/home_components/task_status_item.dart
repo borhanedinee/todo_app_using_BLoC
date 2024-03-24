@@ -2,15 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:todos/main.dart';
 
 class TaskStatusItem extends StatelessWidget {
-  String status;
+  final String status;
 
-  IconData? icon;
+  final IconData? icon;
 
-  int numOfTasks;
+  final int numOfTasks;
 
-  Color color;
+  final Color color;
 
-  TaskStatusItem(
+  const TaskStatusItem(
       {super.key,
       required this.icon,
       required this.status,

@@ -2,8 +2,8 @@
 import 'package:flutter/material.dart';
 
 class CustomAppBar extends StatelessWidget {
-  String user;
-  CustomAppBar({
+  final String user;
+  const CustomAppBar({
     super.key,
     required this.user
   });

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:todos/presentation/page/get_started.dart';
+import 'package:todos/pallets/app_colors.dart';
+import 'package:todos/presentation/view/pages/get_started.dart';
 
 void main() {
   runApp(const MyApp());
@@ -16,15 +17,31 @@ class MyApp extends StatelessWidget {
     size = MediaQuery.of(context).size;
     return MaterialApp(
       theme: ThemeData(
+        elevatedButtonTheme: ElevatedButtonThemeData(
+          style: ButtonStyle( padding: const MaterialStatePropertyAll(
+                  EdgeInsets.symmetric(vertical: 20),
+                ),
+                backgroundColor:
+                    const MaterialStatePropertyAll(AppColors.primaryColor),
+                elevation: const MaterialStatePropertyAll(5),
+                shape: MaterialStatePropertyAll(
+                  RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                ),)
+        ),
+        primaryColor: AppColors.primaryColor,
         fontFamily: 'Bai Jamjuree',
-        colorScheme: ColorScheme.dark(
+        colorScheme: const ColorScheme.dark(
+          primary: AppColors.primaryColor,
           background: Colors.black
+          
           
         )
         
       ),
       debugShowCheckedModeBanner: false,
-      home: GetStarted(),
+      home: const GetStarted(),
     );
   }
 }
