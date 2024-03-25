@@ -13,7 +13,7 @@ class HomeScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
-        body: Container(
+        body: SizedBox(
           width: size.width,
           child: SingleChildScrollView(
             child: Column(
@@ -60,16 +60,16 @@ class HomeScreen extends StatelessWidget {
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               TaskStatusItem(
-                                  icon: Icons.done,
-                                  status: 'Completed',
+                                  icon: Icons.pending_actions_outlined,
+                                  status: 'Pending',
                                   numOfTasks: 8,
                                   color: Colors.yellow),
                               SizedBox(
                                 width: 10,
                               ),
                               TaskStatusItem(
-                                icon: Icons.cancel_outlined,
-                                status: 'Canceled',
+                                icon: Icons.done,
+                                status: 'Completed',
                                 numOfTasks: 3,
                                 color: AppColors.primaryColor,
                               )
@@ -89,7 +89,7 @@ class HomeScreen extends StatelessWidget {
                         children: [
                           const Text(
                             'Recent Tasks',
-                            style: const TextStyle(
+                            style: TextStyle(
                                 color: Colors.white,
                                 fontSize: 18,
                                 fontWeight: FontWeight.w500),
