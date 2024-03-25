@@ -37,7 +37,7 @@ class _TaskDetailsScreenState extends State<TaskDetailsScreen> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Padding(
-                padding: const EdgeInsets.only(left: 10, bottom: 20, top: 10),
+                padding: const EdgeInsets.only(left: 10, top: 10),
                 child: IconButton(
                   onPressed: () {
                     Navigator.of(context).pop();
@@ -47,6 +47,9 @@ class _TaskDetailsScreenState extends State<TaskDetailsScreen> {
                     size: 40,
                   ),
                 ),
+              ),
+              const SizedBox(
+                height: 10,
               ),
               Expanded(
                 child: SingleChildScrollView(
@@ -112,7 +115,8 @@ class _TaskDetailsScreenState extends State<TaskDetailsScreen> {
                                               TextSpan(
                                                 text: '  June 01',
                                                 style: TextStyle(
-                                                    fontWeight: FontWeight.bold),
+                                                    fontWeight:
+                                                        FontWeight.bold),
                                               ),
                                             ],
                                           ),
@@ -122,7 +126,8 @@ class _TaskDetailsScreenState extends State<TaskDetailsScreen> {
                                   ),
                                 ),
                                 const Padding(
-                                  padding: EdgeInsets.only(left: 20, bottom: 10),
+                                  padding:
+                                      EdgeInsets.only(left: 20, bottom: 10),
                                   child: const Text(
                                     'Subtasks',
                                     style: TextStyle(
@@ -143,7 +148,7 @@ class _TaskDetailsScreenState extends State<TaskDetailsScreen> {
                               animationDuration: 2000,
                               center: Text(
                                 '${(widget.completionPercentage * 100).toInt()}%',
-                                style: TextStyle(fontWeight: FontWeight.bold),
+                                style: const TextStyle(fontWeight: FontWeight.bold),
                               ),
                             ),
                           ],
