@@ -13,11 +13,14 @@ class RecentTaskItem extends StatelessWidget {
   final String taskTitle;
 
   final Color progressColor;
+  
+  final String status;
 
   const RecentTaskItem(
       {super.key,
       required this.taskTitle,
       required this.subTitleTask,
+      required this.status,
       required this.completionPercentage,
       required this.numberOfCompletedSubTasks,
       required this.progressColor});
@@ -95,7 +98,32 @@ class RecentTaskItem extends StatelessWidget {
                     Text(
                       '$numberOfCompletedSubTasks tasks',
                       style: const TextStyle(fontWeight: FontWeight.w500),
-                    )
+                    ),
+                    FittedBox(
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+                        margin:
+                            const EdgeInsets.only(left: 8, right: 8, bottom: 0),
+                        decoration: BoxDecoration(
+                          color: switch (this.status.toLowerCase()) {
+                            'on going' => Colors.blue,
+                            'in progress' => Colors.teal,
+                            'pending' => Colors.amber,
+                            // TODO: Handle this case.
+                            String() => null,
+                          },
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        child: Center(
+                          child: Text(
+                            status,
+                            style: TextStyle(
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
                   ],
                 ),
               ],

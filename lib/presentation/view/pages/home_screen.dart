@@ -112,6 +112,7 @@ class HomeScreen extends StatelessWidget {
                       height: 10,
                     ),
                     const RecentTaskItem(
+                      status: 'pending',
                       taskTitle: 'Completing Ecommerce Project',
                       subTitleTask: 'Project of BRAINY',
                       completionPercentage: 0.3,
@@ -119,6 +120,7 @@ class HomeScreen extends StatelessWidget {
                       progressColor: Colors.redAccent,
                     ),
                     const RecentTaskItem(
+                      status: 'on going',
                       taskTitle: 'studying ohoucine shit',
                       subTitleTask: 'PTT',
                       completionPercentage: 0.9,
@@ -126,6 +128,7 @@ class HomeScreen extends StatelessWidget {
                       progressColor: Colors.teal,
                     ),
                     const RecentTaskItem(
+                      status: 'in progress',
                       taskTitle: 'Hamoudi Homework',
                       subTitleTask: 'Ptt',
                       completionPercentage: 0.7,
@@ -133,6 +136,7 @@ class HomeScreen extends StatelessWidget {
                       progressColor: Colors.blue,
                     ),
                     const RecentTaskItem(
+                      status: 'pending',
                       taskTitle: 'Matering BloC',
                       subTitleTask: 'Flutter',
                       completionPercentage: 0.3,
@@ -140,6 +144,7 @@ class HomeScreen extends StatelessWidget {
                       progressColor: Colors.yellow,
                     ),
                     const RecentTaskItem(
+                      status: 'on going',
                       taskTitle: 'Matesring node js',
                       subTitleTask: 'Backend',
                       completionPercentage: 0.3,

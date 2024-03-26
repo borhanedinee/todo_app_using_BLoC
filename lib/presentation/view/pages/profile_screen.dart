@@ -32,7 +32,7 @@ class ProfileScreen extends StatelessWidget {
                   children: [
                     Column(
                       children: [
-                        Text(
+                        const Text(
                           '12',
                           style: TextStyle(
                               fontWeight: FontWeight.bold, fontSize: 16),
@@ -42,13 +42,13 @@ class ProfileScreen extends StatelessWidget {
                                 fontSize: 12, color: Colors.grey.shade200)),
                       ],
                     ),
-                    CircleAvatar(
+                    const CircleAvatar(
                       radius: 50,
                       backgroundImage: AssetImage('assets/images/boy.png'),
                     ),
                     Column(
                       children: [
-                        Text(
+                        const Text(
                           '24',
                           style: TextStyle(
                               fontWeight: FontWeight.bold, fontSize: 16),
@@ -62,17 +62,17 @@ class ProfileScreen extends StatelessWidget {
                 ),
               ),
               Container(
-                padding: EdgeInsets.only(bottom: 30),
+                padding: const EdgeInsets.only(bottom: 30),
                 width: size.width,
-                child: Text(
+                child: const Text(
                   'Borhanedine Boussaha',
                   textAlign: TextAlign.center,
-                  style: TextStyle(fontWeight: FontWeight.w800, fontSize: 18),
+                  style: TextStyle(fontWeight: FontWeight.w800, fontSize: 24),
                 ),
               ),
               Container(
                 alignment: Alignment.center,
-                padding: EdgeInsets.only(bottom: 40),
+                padding: const EdgeInsets.only(bottom: 40),
                 width: size.width,
                 child: ElevatedButton(
                   style: ButtonStyle(
@@ -89,22 +89,22 @@ class ProfileScreen extends StatelessWidget {
                     ),
                   ),
                   onPressed: () {},
-                  child: Text(
+                  child: const Text(
                     'Edit Profile',
                     style: TextStyle(
                         color: Colors.white, fontWeight: FontWeight.bold),
                   ),
                 ),
               ),
-              ProfileSettingsItem(
+              const ProfileSettingsItem(
                 icon: Icons.notifications,
                 itemLabel: 'Notifications',
               ),
-              ProfileSettingsItem(
+              const ProfileSettingsItem(
                 icon: Icons.settings,
                 itemLabel: 'App appearance',
               ),
-              ProfileSettingsItem(
+              const ProfileSettingsItem(
                 icon: Icons.language,
                 itemLabel: 'Langauage',
               ),

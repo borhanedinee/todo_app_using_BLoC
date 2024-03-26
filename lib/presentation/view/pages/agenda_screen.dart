@@ -135,18 +135,21 @@ class _AgendaScreenState extends State<AgendaScreen> {
                 ),
               ),
               const AgendaTaskItem(
+                status: 'In Progress',
                 taskTitle: 'Completing Ecommerce Project',
                 subTitleTask: 'Project of BRAINY',
                 completionPercentage: 0.3,
                 progressColor: Colors.redAccent,
               ),
               const AgendaTaskItem(
+                status: 'In Progress',
                 taskTitle: 'studying ohoucine shit',
                 subTitleTask: 'PTT',
                 completionPercentage: 0.9,
                 progressColor: Colors.teal,
               ),
               const AgendaTaskItem(
+                status: 'On Going',
                 taskTitle: 'Hamoudi Homework',
                 subTitleTask: 'Ptt',
                 completionPercentage: 0.7,

@@ -12,12 +12,16 @@ class AgendaTaskItem extends StatelessWidget {
 
   final Color progressColor;
 
-  const AgendaTaskItem(
-      {super.key,
-      required this.taskTitle,
-      required this.subTitleTask,
-      required this.completionPercentage,
-      required this.progressColor});
+  final String status;
+
+  const AgendaTaskItem({
+    super.key,
+    required this.taskTitle,
+    required this.subTitleTask,
+    required this.status,
+    required this.completionPercentage,
+    required this.progressColor,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -31,7 +35,6 @@ class AgendaTaskItem extends StatelessWidget {
               progressColor: progressColor,
               subTitleTask: subTitleTask,
               taskTitle: taskTitle,
-              
             ),
           ),
         );
@@ -65,13 +68,44 @@ class AgendaTaskItem extends StatelessWidget {
                         overflow: TextOverflow.ellipsis),
                   ),
                 ),
+                SizedBox(
+                  height: 5,
+                ),
                 // TASK DESCRIPTUON OR SOMETHING ELSE
-                Text(
-                  subTitleTask,
-                  style: const TextStyle(color: Colors.white70),
+                Row(
+                  children: [
+                    Text(
+                      subTitleTask,
+                      style: const TextStyle(color: Colors.white70),
+                    ),
+                    FittedBox(
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 8, vertical: 2),
+                        margin:
+                            const EdgeInsets.only(left: 8, right: 8, bottom: 0),
+                        decoration: BoxDecoration(
+                          color: switch (status.toLowerCase()) {
+                            'on going' => Colors.blue,
+                            'in progress' => Colors.teal,
+                            'pending' => Colors.amber,
+                            String() => null,
+                          },
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        child: Center(
+                          child: Text(
+                            status,
+                            style: TextStyle(
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
                 // COMPLETED SUBTAKS
-                
               ],
             ),
             const Spacer(),
