@@ -1,7 +1,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:percent_indicator/percent_indicator.dart';
-import 'package:todos/pallets/app_colors.dart';
+import 'package:todos/presentation/pallets/app_colors.dart';
 
 class OverviewByCategory extends StatelessWidget {
   final String cateryLabel;

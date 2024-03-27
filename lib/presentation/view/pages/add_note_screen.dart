@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:omni_datetime_picker/omni_datetime_picker.dart';
 import 'package:todos/main.dart';
-import 'package:todos/pallets/app_colors.dart';
+import 'package:todos/presentation/pallets/app_colors.dart';
 
 class AddNoteScreen extends StatefulWidget {
   const AddNoteScreen({super.key});

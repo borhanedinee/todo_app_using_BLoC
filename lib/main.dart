@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:todos/pallets/app_colors.dart';
+import 'package:todos/presentation/pallets/app_colors.dart';
 import 'package:todos/presentation/view/pages/get_started.dart';
 
 void main() {

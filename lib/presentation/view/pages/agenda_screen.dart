@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:todos/main.dart';
-import 'package:todos/pallets/app_colors.dart';
+import 'package:todos/presentation/pallets/app_colors.dart';
 import 'package:todos/presentation/view/components/agenda_components/agenda_task_item.dart';
 
 class AgendaScreen extends StatefulWidget {

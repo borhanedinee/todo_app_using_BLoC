@@ -1,7 +1,7 @@
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
 import 'package:todos/main.dart';
-import 'package:todos/pallets/app_colors.dart';
+import 'package:todos/presentation/pallets/app_colors.dart';
 import 'package:todos/presentation/view/components/home_components/custom_app_bar.dart';
 import 'package:todos/presentation/view/components/home_components/task_status_item.dart';
 import 'package:todos/presentation/view/components/home_components/recent_task_item.dart';

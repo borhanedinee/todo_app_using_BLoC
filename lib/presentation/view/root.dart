@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:todos/pallets/app_colors.dart';
+import 'package:todos/presentation/pallets/app_colors.dart';
 import 'package:todos/presentation/view/pages/add_note_screen.dart';
 import 'package:todos/presentation/view/pages/agenda_screen.dart';
 import 'package:todos/presentation/view/pages/home_screen.dart';
