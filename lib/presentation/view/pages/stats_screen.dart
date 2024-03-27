@@ -26,15 +26,34 @@ class StatsScreen extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Padding(
-                padding: const EdgeInsets.only(left: 10, top: 10),
-                child: IconButton(
-                  onPressed: () {},
-                  icon: const Icon(
-                    Icons.navigate_before,
-                    size: 40,
+              Row(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.only(left: 10, top: 10),
+                    child: IconButton(
+                      onPressed: () {},
+                      icon: const Icon(
+                        Icons.navigate_before,
+                        size: 40,
+                      ),
+                    ),
                   ),
-                ),
+                  SizedBox(
+                    width: size.width * 0.25,
+                  ),
+                  const Padding(
+                    padding:  EdgeInsets.only(top: 10),
+                    child: Center(
+                      child: Text(
+                        'Stats',
+                        style: TextStyle(
+                          fontSize: 26,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
               ),
               Expanded(
                 child: SingleChildScrollView(
@@ -194,7 +213,7 @@ class StatsScreen extends StatelessWidget {
                         ),
                       ),
                       const Padding(
-                        padding: EdgeInsets.only(left: 20, top: 20 , bottom: 10),
+                        padding: EdgeInsets.only(left: 20, top: 20, bottom: 10),
                         child: Text(
                           'Recent Tasks',
                           style: TextStyle(
@@ -204,26 +223,26 @@ class StatsScreen extends StatelessWidget {
                         ),
                       ),
                       const AgendaTaskItem(
-                  status: 'In Progress',
-                  taskTitle: 'Completing Ecommerce Project',
-                  subTitleTask: 'Project of BRAINY',
-                  completionPercentage: 0.3,
-                  progressColor: Colors.redAccent,
-                                ),
-                                const AgendaTaskItem(
-                  status: 'In Progress',
-                  taskTitle: 'studying ohoucine shit',
-                  subTitleTask: 'PTT',
-                  completionPercentage: 0.9,
-                  progressColor: Colors.teal,
-                                ),
-                                const AgendaTaskItem(
-                  status: 'On Going',
-                  taskTitle: 'Hamoudi Homework',
-                  subTitleTask: 'Ptt',
-                  completionPercentage: 0.7,
-                  progressColor: Colors.blue,
-                                ),
+                        status: 'In Progress',
+                        taskTitle: 'Completing Ecommerce Project',
+                        subTitleTask: 'Project of BRAINY',
+                        completionPercentage: 0.3,
+                        progressColor: Colors.redAccent,
+                      ),
+                      const AgendaTaskItem(
+                        status: 'In Progress',
+                        taskTitle: 'studying ohoucine shit',
+                        subTitleTask: 'PTT',
+                        completionPercentage: 0.9,
+                        progressColor: Colors.teal,
+                      ),
+                      const AgendaTaskItem(
+                        status: 'On Going',
+                        taskTitle: 'Hamoudi Homework',
+                        subTitleTask: 'Ptt',
+                        completionPercentage: 0.7,
+                        progressColor: Colors.blue,
+                      ),
                     ],
                   ),
                 ),
