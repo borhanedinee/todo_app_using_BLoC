@@ -66,7 +66,7 @@ class RecentTaskItem extends StatelessWidget {
                     taskTitle,
                     style: const TextStyle(
                         color: Colors.white,
-                        fontSize: 17,
+                        fontSize: 16,
                         fontWeight: FontWeight.bold,
                         overflow: TextOverflow.ellipsis),
                   ),
@@ -74,7 +74,7 @@ class RecentTaskItem extends StatelessWidget {
                 // TASK DESCRIPTUON OR SOMETHING ELSE
                 Text(
                   subTitleTask,
-                  style: const TextStyle(color: Colors.white70),
+                  style: const TextStyle(color: Colors.white70 , fontSize: 12),
                 ),
                 // COMPLETED SUBTAKS
                 Row(

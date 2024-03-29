@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:omni_datetime_picker/omni_datetime_picker.dart';
+import 'package:todos/data/network/task_api.dart';
+import 'package:todos/domain/subtask.dart';
+import 'package:todos/domain/task.dart';
 import 'package:todos/main.dart';
 import 'package:todos/presentation/pallets/app_colors.dart';
 
@@ -12,7 +15,12 @@ class AddNoteScreen extends StatefulWidget {
 }
 
 class _AddNoteScreenState extends State<AddNoteScreen> {
-  var datePickerController = TextEditingController();
+
+
+  final _formKey = GlobalKey<FormState>();
+
+
+  var deadlineController = TextEditingController();
 
   var taskTitleController = TextEditingController();
 
@@ -35,6 +43,10 @@ class _AddNoteScreenState extends State<AddNoteScreen> {
   String? selectedCategory;
   String? selectedStatus;
 
+  bool isStatusNotSelected = false;
+  bool isCategoryNotSelected = false;
+  
+  bool titleValidated = false;
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -63,15 +75,22 @@ class _AddNoteScreenState extends State<AddNoteScreen> {
                       padding: EdgeInsets.only(left: 20, bottom: 30),
                       child: Text(
                         'New Task',
-                        style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
+                        style: TextStyle(
+                            fontSize: 30, fontWeight: FontWeight.bold),
                       ),
                     ),
                     Padding(
                       padding: const EdgeInsets.only(left: 15, right: 15),
                       child: Form(
+                        key: _formKey,
                         child: Column(
                           children: [
                             TextFormField(
+                              validator: (value) {
+                                if (value == '') {
+                                  return 'Task title is required';
+                                }
+                              },
                               controller: taskTitleController,
                               decoration: InputDecoration(
                                   border: OutlineInputBorder(
@@ -82,19 +101,19 @@ class _AddNoteScreenState extends State<AddNoteScreen> {
                               height: 20,
                             ),
                             TextFormField(
-                              controller: datePickerController,
+                              controller: deadlineController,
                               decoration: InputDecoration(
                                 border: OutlineInputBorder(
                                     borderRadius: BorderRadius.circular(20)),
-                                hintText: 'Deadline',
+                                hintText: 'Deadline ( optional )',
                                 suffixIcon: IconButton(
                                   onPressed: () async {
                                     DateTime? dateTime =
                                         await showOmniDateTimePicker(
                                             context: context);
-                    
+
                                     setState(() {
-                                      datePickerController.text =
+                                      deadlineController.text =
                                           dateTimeToString(dateTime);
                                     });
                                   },
@@ -109,29 +128,49 @@ class _AddNoteScreenState extends State<AddNoteScreen> {
                               height: 150,
                               alignment: Alignment.topLeft,
                               child: TextField(
+                                controller: taskDetailsController,
                                 minLines: null,
                                 maxLines: null,
                                 expands: true,
                                 decoration: InputDecoration(
                                     border: OutlineInputBorder(
-                                        borderRadius: BorderRadius.circular(20)),
-                                    hintText: 'Add your task details'),
+                                        borderRadius:
+                                            BorderRadius.circular(20)),
+                                    hintText:
+                                        'Add your task details ( optional )'),
                               ),
                             ),
                           ],
                         ),
                       ),
                     ),
-                    const Padding(
-                      padding: EdgeInsets.only(left: 20, bottom: 20, top: 15),
-                      child: Text(
-                        'Status',
-                        style: TextStyle(fontWeight: FontWeight.w500, fontSize: 18),
+                    Padding(
+                      padding:
+                          const EdgeInsets.only(left: 20, bottom: 20, top: 15),
+                      child: RichText(
+                        text: TextSpan(
+                          children: [
+                            const TextSpan(
+                              text: 'Status ',
+                              style: TextStyle(
+                                  fontFamily: 'Bai Jamjuree',
+                                  fontWeight: FontWeight.w500,
+                                  fontSize: 18),
+                            ),
+                            if (isStatusNotSelected)
+                              const TextSpan(
+                                text: ' status is required',
+                                style: TextStyle(
+                                    fontFamily: 'Bai Jamjuree',
+                                    color: Colors.red),
+                              ),
+                          ],
+                        ),
                       ),
                     ),
                     Padding(
-                      padding:
-                          const EdgeInsets.only(left: 12, right: 20, bottom: 20),
+                      padding: const EdgeInsets.only(
+                          left: 12, right: 20, bottom: 20),
                       child: Wrap(
                         children: statusList.map((status) {
                           return FittedBox(
@@ -152,12 +191,12 @@ class _AddNoteScreenState extends State<AddNoteScreen> {
                                       : switch (status) {
                                           'On Going' => Colors.blue,
                                           'In Progress' => Colors.teal,
-                                          'Pending' =>
-                                            Colors.yellow.shade700,
+                                          'Pending' => Colors.yellow.shade700,
                                           String() => null,
                                         },
                                   border: selectedStatus == status
-                                      ? Border.all(width: 1, color: Colors.white)
+                                      ? Border.all(
+                                          width: 1, color: Colors.white)
                                       : null,
                                   borderRadius: BorderRadius.circular(10),
                                 ),
@@ -168,16 +207,33 @@ class _AddNoteScreenState extends State<AddNoteScreen> {
                         }).toList(),
                       ),
                     ),
-                    const Padding(
-                      padding: EdgeInsets.only(left: 20, bottom: 20),
-                      child: Text(
-                        'Categories',
-                        style: TextStyle(fontWeight: FontWeight.w500, fontSize: 18),
+                    Padding(
+                      padding: const EdgeInsets.only(left: 20, bottom: 20),
+                      child: RichText(
+                        text: TextSpan(
+                          children: [
+                            const TextSpan(
+                              text: 'Categories ',
+                              style: TextStyle(
+                                  fontFamily: 'Bai Jamjuree',
+                                  fontWeight: FontWeight.w500,
+                                  fontSize: 18),
+                            ),
+                            if (isCategoryNotSelected)
+                              const TextSpan(
+                                text: ' category is required',
+                                style: TextStyle(
+                                  color: Colors.red,
+                                  fontFamily: 'Bai Jamjuree',
+                                ),
+                              ),
+                          ],
+                        ),
                       ),
                     ),
                     Padding(
-                      padding:
-                          const EdgeInsets.only(left: 12, right: 20, bottom: 20),
+                      padding: const EdgeInsets.only(
+                          left: 12, right: 20, bottom: 20),
                       child: Wrap(
                         children: categories.map((category) {
                           return FittedBox(
@@ -197,7 +253,8 @@ class _AddNoteScreenState extends State<AddNoteScreen> {
                                       ? AppColors.primaryColor.withOpacity(0.8)
                                       : Colors.grey[800],
                                   border: selectedCategory == category
-                                      ? Border.all(width: 1, color: Colors.white)
+                                      ? Border.all(
+                                          width: 1, color: Colors.white)
                                       : null,
                                   borderRadius: BorderRadius.circular(10),
                                 ),
@@ -212,7 +269,53 @@ class _AddNoteScreenState extends State<AddNoteScreen> {
                       width: size.width,
                       margin: const EdgeInsets.only(right: 20, left: 20),
                       child: ElevatedButton(
-                        onPressed: () {},
+                        onPressed: () async {
+                          if (selectedStatus == null) {
+                            setState(() {
+                              isStatusNotSelected = true;
+                            });
+                          } else {
+                            setState(() {
+                              isStatusNotSelected = false;
+                            });
+                          }
+                          if (selectedCategory == null) {
+                            isCategoryNotSelected = true;
+                          } else {
+                            setState(() {
+                              isCategoryNotSelected = false;
+                            });
+                          }
+                          if (_formKey.currentState!.validate()) {
+                            setState(() {
+                              titleValidated = true;
+                            });
+                          } else {
+                            setState(() {
+                              titleValidated = false;
+                            });
+                          }
+
+                          if (titleValidated && !isCategoryNotSelected &&!isStatusNotSelected) {
+                            // do your stuff here
+                            print('things are validated for submission');
+                          } else print('things are not validated for submission');
+                          // print(selectedCategory);
+                          // print(taskDetailsController.text);
+                          // print(deadlineController.text);
+                          // print(selectedStatus);
+                          // print(taskTitleController.text);
+                          // await TaskAPI.addTask(
+                          //   Task(
+                          //     taskCategory: selectedCategory,
+                          //     taskDeadline: deadlineController.text,
+                          //     taskDetails: taskDetailsController.text,
+                          //     taskStatus: selectedStatus,
+                          //     taskTitle: taskTitleController.text,
+                          //     taskUser: 1,
+                          //   ),
+                          // );
+                        },
                         style: ButtonStyle(
                           padding: const MaterialStatePropertyAll(
                             EdgeInsets.symmetric(vertical: 17),

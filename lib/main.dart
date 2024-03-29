@@ -8,7 +8,6 @@ void main() {
 
 late Size size ;
 
-
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 

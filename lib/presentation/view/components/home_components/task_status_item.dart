@@ -48,7 +48,7 @@ class TaskStatusItem extends StatelessWidget {
                 style: const TextStyle(
                     color: Colors.black,
                     fontWeight: FontWeight.bold,
-                    fontSize: 18),
+                    fontSize: 16),
               ),
               Text('$numOfTasks tasks',
                   style: TextStyle(

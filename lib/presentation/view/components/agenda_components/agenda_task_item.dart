@@ -63,12 +63,12 @@ class AgendaTaskItem extends StatelessWidget {
                     taskTitle,
                     style: const TextStyle(
                         color: Colors.white,
-                        fontSize: 17,
+                        fontSize: 16,
                         fontWeight: FontWeight.bold,
                         overflow: TextOverflow.ellipsis),
                   ),
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 5,
                 ),
                 // TASK DESCRIPTUON OR SOMETHING ELSE
@@ -76,7 +76,7 @@ class AgendaTaskItem extends StatelessWidget {
                   children: [
                     Text(
                       subTitleTask,
-                      style: const TextStyle(color: Colors.white70),
+                      style: const TextStyle(color: Colors.white70,fontSize: 12),
                     ),
                     FittedBox(
                       child: Container(
@@ -96,8 +96,9 @@ class AgendaTaskItem extends StatelessWidget {
                         child: Center(
                           child: Text(
                             status,
-                            style: TextStyle(
+                            style: const TextStyle(
                               fontWeight: FontWeight.w600,
+                              fontSize: 13
                             ),
                           ),
                         ),
@@ -121,7 +122,7 @@ class AgendaTaskItem extends StatelessWidget {
                 animationDuration: 2000,
                 center: Text(
                   '${(completionPercentage * 100).toInt()}%',
-                  style: TextStyle(fontWeight: FontWeight.bold),
+                  style: const TextStyle(fontWeight: FontWeight.bold),
                 ),
               ),
             )
