@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:omni_datetime_picker/omni_datetime_picker.dart';
 import 'package:todos/data/network/task_api.dart';
-import 'package:todos/domain/subtask.dart';
-import 'package:todos/domain/task.dart';
+import 'package:todos/domain/models/subtask.dart';
+import 'package:todos/domain/models/task.dart';
 import 'package:todos/main.dart';
 import 'package:todos/presentation/pallets/app_colors.dart';
 
@@ -300,21 +300,7 @@ class _AddNoteScreenState extends State<AddNoteScreen> {
                             // do your stuff here
                             print('things are validated for submission');
                           } else print('things are not validated for submission');
-                          // print(selectedCategory);
-                          // print(taskDetailsController.text);
-                          // print(deadlineController.text);
-                          // print(selectedStatus);
-                          // print(taskTitleController.text);
-                          // await TaskAPI.addTask(
-                          //   Task(
-                          //     taskCategory: selectedCategory,
-                          //     taskDeadline: deadlineController.text,
-                          //     taskDetails: taskDetailsController.text,
-                          //     taskStatus: selectedStatus,
-                          //     taskTitle: taskTitleController.text,
-                          //     taskUser: 1,
-                          //   ),
-                          // );
+                        
                         },
                         style: ButtonStyle(
                           padding: const MaterialStatePropertyAll(

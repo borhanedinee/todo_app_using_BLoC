@@ -1,4 +1,4 @@
-import 'package:todos/domain/subtask.dart';
+import 'package:todos/domain/models/subtask.dart';
 
 class Task {
   int? taskId;

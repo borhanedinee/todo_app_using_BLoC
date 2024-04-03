@@ -1,7 +1,7 @@
 import 'dart:convert';
 
 import 'package:http/http.dart' as http;
-import 'package:todos/domain/task.dart';
+import 'package:todos/domain/models/task.dart';
 import 'package:todos/utils/constants.dart';
 
 class TaskAPI {
@@ -11,11 +11,10 @@ class TaskAPI {
     try {
       var req = await http.post(
         Uri.parse('${Constants.baseUrl}/api/tasks/addtask/'),
-        body: json.encode(data) ,
+        body: json.encode(data),
         headers: {
           'Content-Type': 'application/json ; charset=UTF-8',
         },
-        
       );
       if (req.statusCode == 200) {
         var response = json.decode(req.body);
@@ -26,4 +25,26 @@ class TaskAPI {
       print(e.toString());
     }
   }
+
+  //fetch tasks
+  static fetchTask(userId) async {
+    try {
+      var req = await http.post(
+        Uri.parse(
+          '${Constants.baseUrl}/api/tasks/fetchtask/',
+        ),
+        body: json.encode(userId),
+        headers: {
+          'Content-Type': 'application/json ; charset=UTF-8',
+        },
+      );
+      if (req.statusCode == 200) {
+        var response = json.decode(req.body);
+        return response;
+      }
+    } catch (e) {
+      print(e.toString());
+    }
+  }
+  
 }
