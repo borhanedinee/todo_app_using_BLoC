@@ -1,9 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:omni_datetime_picker/omni_datetime_picker.dart';
-import 'package:todos/data/network/task_api.dart';
-import 'package:todos/domain/models/subtask.dart';
-import 'package:todos/domain/models/task.dart';
 import 'package:todos/main.dart';
 import 'package:todos/presentation/pallets/app_colors.dart';
 
@@ -15,10 +12,7 @@ class AddNoteScreen extends StatefulWidget {
 }
 
 class _AddNoteScreenState extends State<AddNoteScreen> {
-
-
   final _formKey = GlobalKey<FormState>();
-
 
   var deadlineController = TextEditingController();
 
@@ -45,7 +39,7 @@ class _AddNoteScreenState extends State<AddNoteScreen> {
 
   bool isStatusNotSelected = false;
   bool isCategoryNotSelected = false;
-  
+
   bool titleValidated = false;
   @override
   Widget build(BuildContext context) {
@@ -90,6 +84,7 @@ class _AddNoteScreenState extends State<AddNoteScreen> {
                                 if (value == '') {
                                   return 'Task title is required';
                                 }
+                                return null;
                               },
                               controller: taskTitleController,
                               decoration: InputDecoration(
@@ -296,11 +291,14 @@ class _AddNoteScreenState extends State<AddNoteScreen> {
                             });
                           }
 
-                          if (titleValidated && !isCategoryNotSelected &&!isStatusNotSelected) {
+                          if (titleValidated &&
+                              !isCategoryNotSelected &&
+                              !isStatusNotSelected) {
                             // do your stuff here
                             print('things are validated for submission');
-                          } else print('things are not validated for submission');
-                        
+                          } else {
+                            print('things are not validated for submission');
+                          }
                         },
                         style: ButtonStyle(
                           padding: const MaterialStatePropertyAll(
