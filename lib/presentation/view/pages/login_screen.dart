@@ -1,15 +1,34 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:todos/bloc/authbloc/auth_bloc.dart';
 import 'package:todos/main.dart';
 import 'package:todos/presentation/pallets/app_colors.dart';
 import 'package:todos/presentation/view/root.dart';
 
-class LogIn extends StatelessWidget {
-  const LogIn({super.key});
+class LogIn extends StatefulWidget {
+  LogIn({super.key});
+
+  @override
+  State<LogIn> createState() => _LogInState();
+}
+
+class _LogInState extends State<LogIn> {
+  late TextEditingController emailController;
+  late TextEditingController passwordController;
+  var authKey;
+  @override
+  void initState() {
+    super.initState();
+    emailController = TextEditingController();
+    passwordController = TextEditingController();
+    authKey = GlobalKey<FormState>();
+  }
 
   @override
   Widget build(BuildContext context) {
+    final authBloc = BlocProvider.of<AuthBloc>(context);
     return Scaffold(
-      body: Column(
+      body: ListView(
         children: [
           const SizedBox(
             height: 80,
@@ -41,6 +60,7 @@ class LogIn extends StatelessWidget {
           ),
           // Signup with google
           Form(
+            key: authKey,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -54,6 +74,16 @@ class LogIn extends StatelessWidget {
                         height: 5,
                       ),
                       TextFormField(
+                        validator: (value) {
+                          if (value == '') {
+                            return 'Please enter a valid email address';
+                          }
+                          if (!value!.contains('@') || !value.contains('.')) {
+                            return 'invalid email';
+                          }
+                          return null;
+                        },
+                        controller: emailController,
                         decoration: const InputDecoration(
                           border: OutlineInputBorder(),
                           hintText: 'Enter e-mail',
@@ -67,6 +97,13 @@ class LogIn extends StatelessWidget {
                         height: 5,
                       ),
                       TextFormField(
+                        validator: (value) {
+                          if (value == '') {
+                            return 'Please enter a password';
+                          }
+                          return null;
+                        },
+                        controller: passwordController,
                         decoration: const InputDecoration(
                           hintText: 'Enter password',
                           border: OutlineInputBorder(),
@@ -81,7 +118,8 @@ class LogIn extends StatelessWidget {
                     onPressed: () {},
                     child: const Text(
                       'Forgot Passorwd?',
-                      style: TextStyle(color: Color.fromARGB(255, 250, 157, 140)),
+                      style:
+                          TextStyle(color: Color.fromARGB(255, 250, 157, 140)),
                     ),
                   ),
                 )
@@ -183,9 +221,14 @@ class LogIn extends StatelessWidget {
             padding: const EdgeInsets.symmetric(horizontal: 20),
             child: ElevatedButton(
               onPressed: () {
-                Navigator.of(context).pushReplacement(MaterialPageRoute(
-                  builder: (context) => RootScreen(),
-                ));
+                if (authKey.currentState!.validate()) {
+                  authBloc.add(
+                    LoginEvent(
+                      email: emailController.text,
+                      password: passwordController.text,
+                    ),
+                  );
+                }
               },
               style: ButtonStyle(
                 padding: const MaterialStatePropertyAll(
@@ -200,10 +243,56 @@ class LogIn extends StatelessWidget {
                   ),
                 ),
               ),
-              child: const Text(
-                'Login',
-                style:
-                    TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+              child: BlocConsumer<AuthBloc, AuthState>(
+                listener: (context, state) {
+                  if (state is AuthSuccess) {
+                    if (state.user == null) {
+                      print('borhan');
+                      ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        content: Text(state.message),
+                        backgroundColor: Colors.grey,
+                      ),
+                    );
+                    } else {
+                      print('maria');
+                      ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        content: Text(state.message),
+                        backgroundColor: Colors.grey,
+                        
+                      ),
+                    );
+                    Navigator.of(context).pushReplacement(
+                      MaterialPageRoute(
+                        builder: (context) => RootScreen(),
+                      ),
+                    );
+                    }
+                  }
+                  if (state is AuthError) 
+                  {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                       SnackBar(
+                        content: Text(state.message),
+                        backgroundColor: Colors.grey,
+                      ),
+                    );
+                  }
+                },
+                builder: (context, state) {
+                  if (state is AuthLoading) {
+                    return const CircularProgressIndicator(
+                      color: Colors.white,
+                    );
+                  } else {
+                    return const Text(
+                      'Login',
+                      style: TextStyle(
+                          color: Colors.white, fontWeight: FontWeight.bold),
+                    );
+                  }
+                },
               ),
             ),
           ),

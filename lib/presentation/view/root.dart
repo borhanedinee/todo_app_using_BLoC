@@ -16,7 +16,12 @@ class RootScreen extends StatefulWidget {
 class _RootScreenState extends State<RootScreen> {
   int currentIndex = 0;
 
-  List body = [const HomeScreen(), AgendaScreen(), const StatsScreen(), const ProfileScreen()];
+  List body = [
+    const HomeScreen(),
+    const AgendaScreen(),
+    const StatsScreen(),
+    const ProfileScreen(),
+  ];
 
   @override
   Widget build(BuildContext context) {
@@ -27,9 +32,15 @@ class _RootScreenState extends State<RootScreen> {
         backgroundColor: AppColors.primaryColor,
         shape: const CircleBorder(),
         onPressed: () {
-          Navigator.of(context).push(MaterialPageRoute(builder: (context) => AddNoteScreen(),));
+          Navigator.of(context).push(MaterialPageRoute(
+            builder: (context) => const AddNoteScreen(),
+          ));
         },
-        child: const Icon(Icons.add , color: Colors.white, size: 30,),
+        child: const Icon(
+          Icons.add,
+          color: Colors.white,
+          size: 30,
+        ),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
     );
@@ -51,7 +62,12 @@ class _RootScreenState extends State<RootScreen> {
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: <Widget>[
           IconButton(
-            icon: Icon(Icons.home_outlined , color: AppColors.primaryColor.withOpacity(currentIndex == 0? 1 : 0.4),size: 30,),
+            icon: Icon(
+              Icons.home_outlined,
+              color: AppColors.primaryColor
+                  .withOpacity(currentIndex == 0 ? 1 : 0.4),
+              size: 30,
+            ),
             onPressed: () {
               setState(() {
                 currentIndex = 0;
@@ -59,7 +75,11 @@ class _RootScreenState extends State<RootScreen> {
             },
           ),
           IconButton(
-            icon: Icon(Icons.calendar_today, color: AppColors.primaryColor.withOpacity(currentIndex == 1? 1 : 0.4),),
+            icon: Icon(
+              Icons.calendar_today,
+              color: AppColors.primaryColor
+                  .withOpacity(currentIndex == 1 ? 1 : 0.4),
+            ),
             onPressed: () {
               setState(() {
                 currentIndex = 1;
@@ -68,7 +88,12 @@ class _RootScreenState extends State<RootScreen> {
           ),
           const SizedBox(width: 48), // Custom space between items
           IconButton(
-            icon: Icon(Icons.stairs_outlined, color: AppColors.primaryColor.withOpacity(currentIndex == 2? 1 : 0.4),size: 28,),
+            icon: Icon(
+              Icons.stairs_outlined,
+              color: AppColors.primaryColor
+                  .withOpacity(currentIndex == 2 ? 1 : 0.4),
+              size: 28,
+            ),
             onPressed: () {
               setState(() {
                 currentIndex = 2;
@@ -76,7 +101,12 @@ class _RootScreenState extends State<RootScreen> {
             },
           ),
           IconButton(
-            icon: Icon(Icons.person_outline_outlined, color: AppColors.primaryColor.withOpacity(currentIndex == 3? 1 : 0.4),size: 30,),
+            icon: Icon(
+              Icons.person_outline_outlined,
+              color: AppColors.primaryColor
+                  .withOpacity(currentIndex == 3 ? 1 : 0.4),
+              size: 30,
+            ),
             onPressed: () {
               setState(() {
                 currentIndex = 3;

@@ -1,29 +1,25 @@
 import 'dart:convert';
 
 import 'package:http/http.dart' as http;
-import 'package:todos/domain/models/user.dart';
 import 'package:todos/utils/constants.dart';
 
 class UserAPI {
   //LOG IN
-  static Future<User?> logUserIn(User user) async {
+  static Future<dynamic> logUserIn(map) async {
     try {
       var result = await http.post(
-        Uri.parse('${Constants.baseUrl}/user/login/'),
-        body: json.encode(user),
+        Uri.parse('${Constants.baseUrl}/api/getuser/'),
+        body: json.encode(map),
         headers: {
           'Content-Type': 'application/json ; charset=UTF-8',
         },
       );
+      Map<String, dynamic> resultConverted = jsonDecode(result.body);
       if (result.statusCode == 200) {
-        User user = User.fromJson(
-          jsonDecode(result.body),
-        );
-        return user;
+        return resultConverted;
       }
     } catch (e) {
-      print(e.toString());
+      throw(e.toString());
     }
-    return null;
   }
 }

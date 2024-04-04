@@ -39,7 +39,9 @@ class TaskAPI {
         },
       );
       if (req.statusCode == 200) {
-        var response = json.decode(req.body);
+        //TODO: make sure of the type of the response here
+        //TODO: i expect it to be list of json 
+        var response = json.decode(req.body).toList();
         return response;
       }
     } catch (e) {

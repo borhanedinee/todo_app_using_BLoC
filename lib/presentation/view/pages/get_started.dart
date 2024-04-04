@@ -23,7 +23,11 @@ class GetStarted extends StatelessWidget {
             padding: const EdgeInsets.symmetric(horizontal: 20),
             child: ElevatedButton(
               onPressed: () {
-                Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => const LogIn(),));
+                Navigator.of(context).pushReplacement(
+                  MaterialPageRoute(
+                    builder: (context) => LogIn(),
+                  ),
+                );
               },
               style: ButtonStyle(
                 padding: const MaterialStatePropertyAll(
