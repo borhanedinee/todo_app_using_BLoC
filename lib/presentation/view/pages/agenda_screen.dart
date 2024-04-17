@@ -3,7 +3,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import 'package:todos/bloc/homebloc/home_bloc.dart';
 import 'package:todos/domain/models/task.dart';
-import 'package:todos/main.dart';
 import 'package:todos/presentation/pallets/app_colors.dart';
 import 'package:todos/presentation/view/components/agenda_components/agenda_task_item.dart';
 import 'package:todos/presentation/view/components/custom_appbar.dart';
