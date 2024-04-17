@@ -12,11 +12,10 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     on<FetchHomeDataEvent>((event, emit) async {
       emit(HomeLoading());
       await Future.delayed(
-        const Duration(seconds: 8),
+        const Duration(seconds: 12),
       );
       try {
         var response = await taskRepository.fetchTask(event.userId);
-        print('brooooooo' + response.toString());
         emit(
           HomeLoaded(
             onGoingCount: response['onGoingCount'],
@@ -26,7 +25,6 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
             recentTaks: response['tasks'],
           ),
         );
-        print('jkgagflagfgfljagfljgsfljge');
       } catch (e) {
         emit(
           HomeError(

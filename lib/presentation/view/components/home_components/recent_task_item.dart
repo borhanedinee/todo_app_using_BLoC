@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
+import 'package:todos/domain/models/task.dart';
 import 'package:todos/main.dart';
 import 'package:todos/presentation/view/pages/task_details_screen.dart';
 
@@ -8,19 +9,15 @@ class RecentTaskItem extends StatelessWidget {
 
   final int numberOfCompletedSubTasks;
 
-  final String subTitleTask;
-
-  final String taskTitle;
 
   final Color progressColor;
+
+  final Task task;
   
-  final String status;
 
   const RecentTaskItem(
       {super.key,
-      required this.taskTitle,
-      required this.subTitleTask,
-      required this.status,
+      required this.task,
       required this.completionPercentage,
       required this.numberOfCompletedSubTasks,
       required this.progressColor});
@@ -35,8 +32,7 @@ class RecentTaskItem extends StatelessWidget {
               completionPercentage: completionPercentage,
               numberOfCompletedSubTasks: numberOfCompletedSubTasks,
               progressColor: progressColor,
-              subTitleTask: subTitleTask,
-              taskTitle: taskTitle,
+              task: task,
               
             ),
           ),
@@ -63,7 +59,7 @@ class RecentTaskItem extends StatelessWidget {
                 SizedBox(
                   width: size.width * 0.65,
                   child: Text(
-                    taskTitle,
+                    task.taskTitle!,
                     style: const TextStyle(
                         color: Colors.white,
                         fontSize: 16,
@@ -73,7 +69,7 @@ class RecentTaskItem extends StatelessWidget {
                 ),
                 // TASK DESCRIPTUON OR SOMETHING ELSE
                 Text(
-                  subTitleTask,
+                  task.taskDetails!,
                   style: const TextStyle(color: Colors.white70 , fontSize: 12),
                 ),
                 // COMPLETED SUBTAKS
@@ -105,7 +101,7 @@ class RecentTaskItem extends StatelessWidget {
                         margin:
                             const EdgeInsets.only(left: 8, right: 8, bottom: 0),
                         decoration: BoxDecoration(
-                          color: switch (status.toLowerCase()) {
+                          color: switch (task.taskStatus!.toLowerCase()) {
                             'on going' => Colors.blue,
                             'in progress' => Colors.teal,
                             'pending' => Colors.amber,
@@ -115,7 +111,7 @@ class RecentTaskItem extends StatelessWidget {
                         ),
                         child: Center(
                           child: Text(
-                            status,
+                            task.taskStatus!,
                             style: const TextStyle(
                               fontSize: 12,
                               fontWeight: FontWeight.w600,

@@ -1,4 +1,3 @@
-import 'dart:developer';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -15,7 +14,6 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       emit(AuthLoading());
       await Future.delayed(const Duration(seconds: 3));
       try {
-        print('object');
         Map<String, dynamic> data = await userRepository.loginUser(
           {
             'email': event.email,

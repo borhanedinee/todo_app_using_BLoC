@@ -94,27 +94,13 @@ class StatsScreen extends StatelessWidget {
                           ),
                         ),
                       ),
-                      const AgendaTaskItem(
-                        status: 'In Progress',
-                        taskTitle: 'Completing Ecommerce Project',
-                        subTitleTask: 'Project of BRAINY',
-                        completionPercentage: 0.3,
-                        progressColor: Colors.redAccent,
-                      ),
-                      const AgendaTaskItem(
-                        status: 'In Progress',
-                        taskTitle: 'studying ohoucine shit',
-                        subTitleTask: 'PTT',
-                        completionPercentage: 0.9,
-                        progressColor: Colors.teal,
-                      ),
-                      const AgendaTaskItem(
-                        status: 'On Going',
-                        taskTitle: 'Hamoudi Homework',
-                        subTitleTask: 'Ptt',
-                        completionPercentage: 0.7,
-                        progressColor: Colors.blue,
-                      ),
+                       const SizedBox(
+                  height: 300,
+                  child: Center(
+                    //TODO: handle recent tasks items
+                    child: Text('Handle stats recent tasks items'),
+                  ),
+                )
                     ],
                   ),
                 ),

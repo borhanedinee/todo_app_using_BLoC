@@ -142,9 +142,7 @@ class HomeScreen extends StatelessWidget {
                           ...List.generate(state.recentTaks.length, (index) {
                             Task task = state.recentTaks[index];
                             return RecentTaskItem(
-                                taskTitle: task.taskTitle!,
-                                subTitleTask: task.taskDetails!,
-                                status: task.taskStatus!,
+                              task: task,
                                 completionPercentage: 0.4,
                                 numberOfCompletedSubTasks: 4,
                                 progressColor: Colors.orange);

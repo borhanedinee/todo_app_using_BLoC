@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:todos/bloc/homebloc/home_bloc.dart';
 import 'package:todos/main.dart';
 import 'package:todos/presentation/pallets/app_colors.dart';
 import 'package:todos/presentation/view/components/custom_appbar.dart';
@@ -16,7 +18,7 @@ class ProfileScreen extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              DefaultAppBar(title: 'Profile'),
+              const DefaultAppBar(title: 'Profile'),
               Padding(
                 padding: const EdgeInsets.only(bottom: 30, top: 20),
                 child: Row(
@@ -24,10 +26,31 @@ class ProfileScreen extends StatelessWidget {
                   children: [
                     Column(
                       children: [
-                        const Text(
-                          '12',
-                          style: TextStyle(
-                              fontWeight: FontWeight.bold, fontSize: 16),
+                        BlocBuilder<HomeBloc, HomeState>(
+                          builder: (context, state) {
+                            if (state is HomeLoading) {
+                              return const Text(
+                                'loading...',
+                                style: TextStyle(
+                                    fontWeight: FontWeight.bold, fontSize: 16),
+                              );
+                            }
+                            if (state is HomeLoaded) {
+                              return Text(
+                                state.inProgressCount.toString(),
+                                style: const TextStyle(
+                                    fontWeight: FontWeight.bold, fontSize: 16),
+                              );
+                            }
+                            if (state is HomeError) {
+                              return const Text(
+                                '?',
+                                style: TextStyle(
+                                    fontWeight: FontWeight.bold, fontSize: 16),
+                              );
+                            }
+                            return Container();
+                          },
                         ),
                         Text('In progress tasks',
                             style: TextStyle(
@@ -40,10 +63,31 @@ class ProfileScreen extends StatelessWidget {
                     ),
                     Column(
                       children: [
-                        const Text(
-                          '24',
-                          style: TextStyle(
-                              fontWeight: FontWeight.bold, fontSize: 16),
+                        BlocBuilder<HomeBloc, HomeState>(
+                          builder: (context, state) {
+                            if (state is HomeLoading) {
+                              return const Text(
+                                'loading...',
+                                style: TextStyle(
+                                    fontWeight: FontWeight.bold, fontSize: 16),
+                              );
+                            }
+                            if (state is HomeLoaded) {
+                              return Text(
+                                state.completedCount.toString(),
+                                style: const TextStyle(
+                                    fontWeight: FontWeight.bold, fontSize: 16),
+                              );
+                            }
+                            if (state is HomeError) {
+                              return const Text(
+                                '?',
+                                style: TextStyle(
+                                    fontWeight: FontWeight.bold, fontSize: 16),
+                              );
+                            }
+                            return Container();
+                          },
                         ),
                         Text('Completed tasks',
                             style: TextStyle(
@@ -56,10 +100,11 @@ class ProfileScreen extends StatelessWidget {
               Container(
                 padding: const EdgeInsets.only(bottom: 30),
                 width: size.width,
-                child: const Text(
-                  'Borhanedine Boussaha',
+                child: Text(
+                  prefs.getString('username')!,
                   textAlign: TextAlign.center,
-                  style: TextStyle(fontWeight: FontWeight.w800, fontSize: 24),
+                  style: const TextStyle(
+                      fontWeight: FontWeight.w800, fontSize: 24),
                 ),
               ),
               Container(

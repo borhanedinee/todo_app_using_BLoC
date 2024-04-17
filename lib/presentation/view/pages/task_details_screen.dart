@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
+import 'package:todos/domain/models/task.dart';
 import 'package:todos/main.dart';
 
 class TaskDetailsScreen extends StatefulWidget {
@@ -7,16 +8,13 @@ class TaskDetailsScreen extends StatefulWidget {
 
   final int numberOfCompletedSubTasks;
 
-  final String subTitleTask;
-
-  final String taskTitle;
+final Task task;
 
   final Color progressColor;
 
   const TaskDetailsScreen(
       {super.key,
-      required this.taskTitle,
-      required this.subTitleTask,
+      required this.task,
       required this.completionPercentage,
       required this.numberOfCompletedSubTasks,
       required this.progressColor});
@@ -57,15 +55,41 @@ class _TaskDetailsScreenState extends State<TaskDetailsScreen> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Padding(
-                        padding: const EdgeInsets.only(left: 20, bottom: 30),
+                        padding: const EdgeInsets.only(left: 20, bottom: 20),
                         child: Text(
-                          widget.taskTitle,
+                          widget.task.taskTitle!,
                           style: const TextStyle(
                             fontSize: 26,
                             fontWeight: FontWeight.bold,
                           ),
                         ),
                       ),
+                      FittedBox(
+                      child: Container(
+                        
+                        padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 5),
+                        margin:
+                            const EdgeInsets.only(left: 20, right: 8, bottom: 20),
+                        decoration: BoxDecoration(
+                          color: switch (widget.task.taskStatus!.toLowerCase()) {
+                            'on going' => Colors.blue,
+                            'in progress' => Colors.teal,
+                            'pending' => Colors.amber,
+                            String() => null,
+                          },
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        child: Center(
+                          child: Text(
+                           widget.task.taskStatus!,
+                            style: const TextStyle(
+                              fontSize: 14,
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
                       const Padding(
                         padding: EdgeInsets.only(
                           left: 20,

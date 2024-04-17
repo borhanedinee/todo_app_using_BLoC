@@ -1,26 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
+import 'package:todos/domain/models/task.dart';
 import 'package:todos/main.dart';
 import 'package:todos/presentation/view/pages/task_details_screen.dart';
 
 class AgendaTaskItem extends StatelessWidget {
   final double completionPercentage;
 
-  final String subTitleTask;
+ final Task task;
 
-  final String taskTitle;
-
-  final Color progressColor;
-
-  final String status;
+ final Color progressColor;
 
   const AgendaTaskItem({
     super.key,
-    required this.taskTitle,
-    required this.subTitleTask,
-    required this.status,
+    required this.task,
     required this.completionPercentage,
-    required this.progressColor,
+    required this.progressColor
   });
 
   @override
@@ -33,8 +28,7 @@ class AgendaTaskItem extends StatelessWidget {
               completionPercentage: completionPercentage,
               numberOfCompletedSubTasks: 8,
               progressColor: progressColor,
-              subTitleTask: subTitleTask,
-              taskTitle: taskTitle,
+              task: task,
             ),
           ),
         );
@@ -59,7 +53,7 @@ class AgendaTaskItem extends StatelessWidget {
                 SizedBox(
                   width: size.width * 0.65,
                   child: Text(
-                    taskTitle,
+                    task.taskTitle!,
                     style: const TextStyle(
                         color: Colors.white,
                         fontSize: 16,
@@ -74,7 +68,7 @@ class AgendaTaskItem extends StatelessWidget {
                 Row(
                   children: [
                     Text(
-                      subTitleTask,
+                      task.taskDetails!,
                       style: const TextStyle(color: Colors.white70,fontSize: 12),
                     ),
                     FittedBox(
@@ -84,7 +78,7 @@ class AgendaTaskItem extends StatelessWidget {
                         margin:
                             const EdgeInsets.only(left: 8, right: 8, bottom: 0),
                         decoration: BoxDecoration(
-                          color: switch (status.toLowerCase()) {
+                          color: switch (task.taskStatus!.toLowerCase()) {
                             'on going' => Colors.blue,
                             'in progress' => Colors.teal,
                             'pending' => Colors.amber,
@@ -94,7 +88,7 @@ class AgendaTaskItem extends StatelessWidget {
                         ),
                         child: Center(
                           child: Text(
-                            status,
+                            task.taskStatus!,
                             style: const TextStyle(
                               fontWeight: FontWeight.w600,
                               fontSize: 12
