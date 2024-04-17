@@ -1,10 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:percent_indicator/linear_percent_indicator.dart';
 import 'package:todos/main.dart';
-import 'package:todos/presentation/pallets/app_colors.dart';
-import 'package:todos/presentation/view/components/agenda_components/agenda_task_item.dart';
 import 'package:todos/presentation/view/components/custom_appbar.dart';
-import 'package:todos/presentation/view/components/home_components/custom_app_bar.dart';
 import 'package:todos/presentation/view/components/stats_components/dashboard.dart';
 import 'package:todos/presentation/view/components/stats_components/overview_by_category_item.dart';
 
