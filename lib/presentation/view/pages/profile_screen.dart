@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:todos/main.dart';
 import 'package:todos/presentation/pallets/app_colors.dart';
+import 'package:todos/presentation/view/components/custom_appbar.dart';
 import 'package:todos/presentation/view/components/profile_components/settings_item.dart';
 
 class ProfileScreen extends StatelessWidget {
@@ -15,35 +16,9 @@ class ProfileScreen extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-             Row(
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.only(left: 10, top: 10),
-                    child: IconButton(
-                      onPressed: () {},
-                      icon: const Icon(
-                        Icons.navigate_before,
-                        size: 40,
-                      ),
-                    ),
-                  ),
-                  SizedBox(
-                    width: size.width * 0.2,
-                  ),
-                  const Padding(
-                    padding: EdgeInsets.only(top: 10),
-                    child: Text(
-                      'Profile',
-                      style: TextStyle(
-                        fontSize: 26,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ),
-                ],
-              ),
+              DefaultAppBar(title: 'Profile'),
               Padding(
-                padding: const EdgeInsets.only(bottom: 30 , top: 20),
+                padding: const EdgeInsets.only(bottom: 30, top: 20),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [

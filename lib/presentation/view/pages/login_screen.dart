@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:todos/bloc/authbloc/auth_bloc.dart';
+import 'package:todos/bloc/homebloc/home_bloc.dart';
 import 'package:todos/main.dart';
 import 'package:todos/presentation/pallets/app_colors.dart';
+import 'package:todos/presentation/view/components/custom_text_field.dart';
 import 'package:todos/presentation/view/root.dart';
 
 class LogIn extends StatefulWidget {
@@ -27,6 +29,7 @@ class _LogInState extends State<LogIn> {
   @override
   Widget build(BuildContext context) {
     final authBloc = BlocProvider.of<AuthBloc>(context);
+    final homeBloc = BlocProvider.of<HomeBloc>(context);
     return Scaffold(
       body: ListView(
         children: [
@@ -73,22 +76,20 @@ class _LogInState extends State<LogIn> {
                       const SizedBox(
                         height: 5,
                       ),
-                      TextFormField(
-                        validator: (value) {
-                          if (value == '') {
-                            return 'Please enter a valid email address';
-                          }
-                          if (!value!.contains('@') || !value.contains('.')) {
-                            return 'invalid email';
-                          }
-                          return null;
-                        },
-                        controller: emailController,
-                        decoration: const InputDecoration(
-                          border: OutlineInputBorder(),
-                          hintText: 'Enter e-mail',
-                        ),
-                      ),
+                      CustomTextField(
+                          passwordController: passwordController,
+                          validator: (value) {
+                            if (value == '') {
+                              return 'Please enter a valid email address';
+                            }
+                            if (!value!.contains('@') || !value.contains('.')) {
+                              return 'invalid email';
+                            }
+                            return null;
+                          },
+                          suffixIcon: null,
+                          hint: 'email@example.com',
+                          prefixIcon: Icons.mail),
                       const SizedBox(
                         height: 10,
                       ),
@@ -96,18 +97,20 @@ class _LogInState extends State<LogIn> {
                       const SizedBox(
                         height: 5,
                       ),
-                      TextFormField(
+                      CustomTextField(
+                        passwordController: passwordController,
+                        hint: ' . . . . . . . . . . . . . . . ',
+                        prefixIcon: Icons.key,
+                        suffixIcon: IconButton(
+                          onPressed: () {},
+                          icon: const Icon(Icons.visibility),
+                        ),
                         validator: (value) {
                           if (value == '') {
                             return 'Please enter a password';
                           }
                           return null;
                         },
-                        controller: passwordController,
-                        decoration: const InputDecoration(
-                          hintText: 'Enter password',
-                          border: OutlineInputBorder(),
-                        ),
                       ),
                     ],
                   ),
@@ -247,33 +250,32 @@ class _LogInState extends State<LogIn> {
                 listener: (context, state) {
                   if (state is AuthSuccess) {
                     if (state.user == null) {
-                      print('borhan');
                       ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(
-                        content: Text(state.message),
-                        backgroundColor: Colors.grey,
-                      ),
-                    );
+                        SnackBar(
+                          content: Text(state.message),
+                          backgroundColor: Colors.grey,
+                        ),
+                      );
                     } else {
-                      print('maria');
                       ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(
-                        content: Text(state.message),
-                        backgroundColor: Colors.grey,
-                        
-                      ),
-                    );
-                    Navigator.of(context).pushReplacement(
-                      MaterialPageRoute(
-                        builder: (context) => RootScreen(),
-                      ),
-                    );
+                        SnackBar(
+                          content: Text(state.message),
+                          backgroundColor: Colors.grey,
+                        ),
+                      );
+                      Navigator.of(context).pushReplacement(
+                        MaterialPageRoute(
+                          builder: (context) => RootScreen(),
+                        ),
+                      );
+                      homeBloc.add(
+                        FetchHomeDataEvent(userId: 1),
+                      );
                     }
                   }
-                  if (state is AuthError) 
-                  {
+                  if (state is AuthError) {
                     ScaffoldMessenger.of(context).showSnackBar(
-                       SnackBar(
+                      SnackBar(
                         content: Text(state.message),
                         backgroundColor: Colors.grey,
                       ),

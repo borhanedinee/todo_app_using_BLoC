@@ -22,8 +22,7 @@ class ProfileSettingsItem extends StatelessWidget {
       width: size.width,
       decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(10),
-          color: Colors.grey[950],
-          border: Border.all(color: Colors.grey.withOpacity(0.5))),
+          color: Colors.grey.shade800.withOpacity(0.5),),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [

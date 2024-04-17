@@ -1,7 +1,7 @@
 import 'package:todos/data/network/task_api.dart';
 import 'package:todos/domain/models/task.dart';
 
-class TaskRepository {
+class HomeRepository {
   //FETCH TASKS BY USER ID
   fetchTask(userId) async {
     try {
@@ -33,7 +33,7 @@ class TaskRepository {
         'pendingCount': pendingCount,
         'onGoingCount': onGoingCount,
         'completedCount': completedCount,
-        'inProgoressCount': inProgoressCount,
+        'inProgressCount': inProgoressCount,
         'tasks': tasks
       };
     } catch (e) {

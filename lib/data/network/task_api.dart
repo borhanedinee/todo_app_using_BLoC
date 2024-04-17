@@ -33,19 +33,20 @@ class TaskAPI {
         Uri.parse(
           '${Constants.baseUrl}/api/tasks/fetchtask/',
         ),
-        body: json.encode(userId),
+        body: json.encode({
+          'userId' : userId,
+        }),
         headers: {
           'Content-Type': 'application/json ; charset=UTF-8',
         },
       );
+      print(req.statusCode);
       if (req.statusCode == 200) {
-        //TODO: make sure of the type of the response here
-        //TODO: i expect it to be list of json 
         var response = json.decode(req.body).toList();
         return response;
       }
     } catch (e) {
-      print(e.toString());
+      print(e.toString() + 'helloooo');
     }
   }
   

@@ -49,9 +49,9 @@ class RecentTaskItem extends StatelessWidget {
         width: size.width,
         margin: const EdgeInsets.only(left: 15, right: 15, bottom: 5, top: 5),
         decoration: BoxDecoration(
-          color: Colors.grey.shade900.withOpacity(0.7),
+          color: Colors.grey.shade800.withOpacity(0.6),
           borderRadius: BorderRadius.circular(20),
-          border: Border.all(color: Colors.grey.withOpacity(0.4), width: 0.8),
+          // border: Border.all(color: Colors.grey.withOpacity(0.4), width: 0.8),
         ),
         child: Row(
           children: [
@@ -105,11 +105,10 @@ class RecentTaskItem extends StatelessWidget {
                         margin:
                             const EdgeInsets.only(left: 8, right: 8, bottom: 0),
                         decoration: BoxDecoration(
-                          color: switch (this.status.toLowerCase()) {
+                          color: switch (status.toLowerCase()) {
                             'on going' => Colors.blue,
                             'in progress' => Colors.teal,
                             'pending' => Colors.amber,
-                            // TODO: Handle this case.
                             String() => null,
                           },
                           borderRadius: BorderRadius.circular(10),
@@ -117,7 +116,8 @@ class RecentTaskItem extends StatelessWidget {
                         child: Center(
                           child: Text(
                             status,
-                            style: TextStyle(
+                            style: const TextStyle(
+                              fontSize: 12,
                               fontWeight: FontWeight.w600,
                             ),
                           ),
@@ -141,7 +141,7 @@ class RecentTaskItem extends StatelessWidget {
                 animationDuration: 2000,
                 center: Text(
                   '${(completionPercentage * 100).toInt()}%',
-                  style: TextStyle(fontWeight: FontWeight.bold),
+                  style: const TextStyle(fontWeight: FontWeight.bold),
                 ),
               ),
             )

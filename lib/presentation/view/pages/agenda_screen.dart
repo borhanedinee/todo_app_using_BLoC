@@ -3,6 +3,7 @@ import 'package:intl/intl.dart';
 import 'package:todos/main.dart';
 import 'package:todos/presentation/pallets/app_colors.dart';
 import 'package:todos/presentation/view/components/agenda_components/agenda_task_item.dart';
+import 'package:todos/presentation/view/components/custom_appbar.dart';
 
 class AgendaScreen extends StatefulWidget {
   const AgendaScreen({super.key});
@@ -32,33 +33,7 @@ class _AgendaScreenState extends State<AgendaScreen> {
           body: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Row(
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.only(left: 10, top: 10),
-                    child: IconButton(
-                      onPressed: () {},
-                      icon: const Icon(
-                        Icons.navigate_before,
-                        size: 40,
-                      ),
-                    ),
-                  ),
-                  SizedBox(
-                    width: size.width * 0.2,
-                  ),
-                  const Padding(
-                    padding: EdgeInsets.only(top: 10),
-                    child:  Text(
-                      'Agenda',
-                      style: TextStyle(
-                        fontSize: 26,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ),
-                ],
-              ),
+              DefaultAppBar(title: 'Agenda'),
               Padding(
                 padding: const EdgeInsets.only(left: 20, bottom: 30 , top: 20),
                 child: Text(

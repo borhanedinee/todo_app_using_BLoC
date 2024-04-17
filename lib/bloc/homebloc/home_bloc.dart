@@ -1,28 +1,32 @@
-import 'package:bloc/bloc.dart';
-import 'package:meta/meta.dart';
-import 'package:todos/data/repositpry/task_repo.dart';
+import 'package:flutter/foundation.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:todos/data/repositpry/home_repo.dart';
 import 'package:todos/domain/models/task.dart';
 
 part 'home_event.dart';
 part 'home_state.dart';
 
 class HomeBloc extends Bloc<HomeEvent, HomeState> {
-  final TaskRepository taskRepository;
+  final HomeRepository taskRepository;
   HomeBloc({required this.taskRepository}) : super(HomeInitial()) {
     on<FetchHomeDataEvent>((event, emit) async {
       emit(HomeLoading());
-      Future.delayed(const Duration(seconds: 2));
+      Future.delayed(
+        const Duration(seconds: 8),
+      );
       try {
-        var tasks = await taskRepository.fetchTask(event.userId);
+        var response = await taskRepository.fetchTask(event.userId);
+        print('brooooooo' + response.toString());
         emit(
           HomeLoaded(
-            onGoingCount: tasks['onGoingCount'],
-            inProgressCount: tasks['inProgressCount'],
-            pendingCount: tasks['pendingCount'],
-            completedCount: tasks['completedCount'],
-            recentTaks:tasks['tasks'],
+            onGoingCount: response['onGoingCount'],
+            inProgressCount: response['inProgressCount'],
+            pendingCount: response['pendingCount'],
+            completedCount: response['completedCount'],
+            recentTaks: response['tasks'],
           ),
         );
+        print('jkgagflagfgfljagfljgsfljge');
       } catch (e) {
         emit(
           HomeError(

@@ -19,7 +19,6 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
             'password': event.password,
           },
         );
-        print('bb$data');
         if (data!.containsKey('user')) {
           emit(
             AuthSuccess(

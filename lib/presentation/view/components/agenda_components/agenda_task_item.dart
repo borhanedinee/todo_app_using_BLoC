@@ -46,9 +46,8 @@ class AgendaTaskItem extends StatelessWidget {
         width: size.width,
         margin: const EdgeInsets.only(left: 15, right: 15, bottom: 5, top: 5),
         decoration: BoxDecoration(
-          color: Colors.grey.shade900.withOpacity(0.7),
+          color: Colors.grey.shade800.withOpacity(0.5),
           borderRadius: BorderRadius.circular(20),
-          border: Border.all(color: Colors.grey.withOpacity(0.4), width: 0.8),
         ),
         child: Row(
           children: [
@@ -98,7 +97,7 @@ class AgendaTaskItem extends StatelessWidget {
                             status,
                             style: const TextStyle(
                               fontWeight: FontWeight.w600,
-                              fontSize: 13
+                              fontSize: 12
                             ),
                           ),
                         ),
