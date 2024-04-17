@@ -4,6 +4,7 @@ import 'package:todos/bloc/authbloc/auth_bloc.dart';
 import 'package:todos/bloc/homebloc/home_bloc.dart';
 import 'package:todos/main.dart';
 import 'package:todos/presentation/pallets/app_colors.dart';
+import 'package:todos/presentation/view/components/custom_signin_button.dart';
 import 'package:todos/presentation/view/components/custom_text_field.dart';
 import 'package:todos/presentation/view/root.dart';
 
@@ -17,7 +18,7 @@ class LogIn extends StatefulWidget {
 class _LogInState extends State<LogIn> {
   late TextEditingController emailController;
   late TextEditingController passwordController;
-  var authKey;
+  late GlobalKey<FormState> authKey;
   @override
   void initState() {
     super.initState();
@@ -37,27 +38,28 @@ class _LogInState extends State<LogIn> {
             height: 80,
           ),
           Container(
-              width: size.width,
-              padding: const EdgeInsets.symmetric(horizontal: 20),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const Text(
-                    'Create an account 🖐',
-                    style: TextStyle(
-                      fontSize: 26,
-                      fontWeight: FontWeight.bold,
-                    ),
+            width: size.width,
+            padding: const EdgeInsets.symmetric(horizontal: 20),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const Text(
+                  'Create an account 🖐',
+                  style: TextStyle(
+                    fontSize: 26,
+                    fontWeight: FontWeight.bold,
                   ),
-                  const SizedBox(
-                    height: 10,
-                  ),
-                  Text(
-                    'Please register on our SteamLine, where you can continue using our services.',
-                    style: TextStyle(color: Colors.grey.shade300),
-                  )
-                ],
-              )),
+                ),
+                const SizedBox(
+                  height: 10,
+                ),
+                Text(
+                  'Please register on our SteamLine, where you can continue using our services.',
+                  style: TextStyle(color: Colors.grey.shade300),
+                )
+              ],
+            ),
+          ),
           const SizedBox(
             height: 40,
           ),
@@ -77,7 +79,7 @@ class _LogInState extends State<LogIn> {
                         height: 5,
                       ),
                       CustomTextField(
-                          passwordController: passwordController,
+                          passwordController: emailController,
                           validator: (value) {
                             if (value == '') {
                               return 'Please enter a valid email address';
@@ -121,8 +123,7 @@ class _LogInState extends State<LogIn> {
                     onPressed: () {},
                     child: const Text(
                       'Forgot Passorwd?',
-                      style:
-                          TextStyle(color: Color.fromARGB(255, 250, 157, 140)),
+                      style: TextStyle(color: Colors.purpleAccent),
                     ),
                   ),
                 )
@@ -155,71 +156,24 @@ class _LogInState extends State<LogIn> {
           const SizedBox(
             height: 10,
           ),
-          Container(
-            margin: const EdgeInsets.symmetric(horizontal: 20),
-            width: size.width,
-            child: ElevatedButton(
-              onPressed: () {},
-              style: const ButtonStyle(
-                  padding: MaterialStatePropertyAll(
-                      EdgeInsets.symmetric(horizontal: 10)),
-                  backgroundColor: MaterialStatePropertyAll(
-                      AppColors.signUpWithGoogleButtonColor)),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  const Text(
-                    'Sign up with Google',
-                    style: TextStyle(color: Colors.black),
-                  ),
-                  const SizedBox(
-                    width: 10,
-                  ),
-                  Image.asset(
-                    'assets/images/google.png',
-                    height: 20,
-                  )
-                ],
-              ),
-            ),
+          CustomSignInButton(
+            onPressed: () {},
+            asset: 'assets/images/google.png',
+            child: 'Sign in with google',
           ),
           const SizedBox(
             height: 10,
           ),
 
-          Container(
-            margin: const EdgeInsets.symmetric(horizontal: 20),
-            width: size.width,
-            child: ElevatedButton(
+          CustomSignInButton(
               onPressed: () {},
-              style: const ButtonStyle(
-                padding: MaterialStatePropertyAll(
-                    EdgeInsets.symmetric(horizontal: 10)),
-                backgroundColor: MaterialStatePropertyAll(
-                    AppColors.signUpWithGoogleButtonColor),
-              ),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  const Text(
-                    'Sign up with Facebook',
-                    style: TextStyle(color: Colors.black),
-                  ),
-                  const SizedBox(
-                    width: 10,
-                  ),
-                  Image.asset(
-                    'assets/images/facebook.png',
-                    height: 20,
-                  )
-                ],
-              ),
-            ),
-          ),
+              child: 'Sign up with Facebook',
+              asset: 'assets/images/facebook.png'),
           const SizedBox(
             height: 50,
           ),
           Container(
+            height: 70,
             width: MediaQuery.of(context).size.width,
             padding: const EdgeInsets.symmetric(horizontal: 20),
             child: ElevatedButton(
@@ -254,9 +208,15 @@ class _LogInState extends State<LogIn> {
                         SnackBar(
                           content: Text(state.message),
                           backgroundColor: Colors.grey,
+
                         ),
                       );
                     } else {
+                      prefs.setInt('userid', state.user!.userId!);
+                      prefs.setString('username', state.user!.userUsername!);
+                      prefs.setString('email', state.user!.userEmail!);
+                      prefs.setString('password', state.user!.userPassword!);
+
                       ScaffoldMessenger.of(context).showSnackBar(
                         SnackBar(
                           content: Text(state.message),
@@ -269,7 +229,7 @@ class _LogInState extends State<LogIn> {
                         ),
                       );
                       homeBloc.add(
-                        FetchHomeDataEvent(userId: 1),
+                        FetchHomeDataEvent(userId: prefs.getInt('userid')!),
                       );
                     }
                   }
@@ -285,6 +245,7 @@ class _LogInState extends State<LogIn> {
                 builder: (context, state) {
                   if (state is AuthLoading) {
                     return const CircularProgressIndicator(
+                      strokeCap: StrokeCap.square,
                       color: Colors.white,
                     );
                   } else {

@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 
 class CustomTextField extends StatelessWidget {
@@ -29,7 +28,7 @@ class CustomTextField extends StatelessWidget {
         validator: validator,
         controller: passwordController,
         decoration: InputDecoration(
-          hintStyle: const TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
+          hintStyle: const TextStyle(fontSize: 14),
           hintText: hint,
           filled: true,
           prefixIcon: Icon(
@@ -38,8 +37,10 @@ class CustomTextField extends StatelessWidget {
           ),
           fillColor: Colors.grey.shade800,
           border: InputBorder.none,
-          contentPadding:
-              const EdgeInsets.symmetric(vertical: 15, horizontal: 10),
+          contentPadding: const EdgeInsets.symmetric(
+            vertical: 15,
+            horizontal: 10,
+          ),
           suffixIcon: suffixIcon,
         ),
       ),

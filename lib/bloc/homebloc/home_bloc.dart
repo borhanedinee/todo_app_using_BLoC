@@ -11,7 +11,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
   HomeBloc({required this.taskRepository}) : super(HomeInitial()) {
     on<FetchHomeDataEvent>((event, emit) async {
       emit(HomeLoading());
-      Future.delayed(
+      await Future.delayed(
         const Duration(seconds: 8),
       );
       try {

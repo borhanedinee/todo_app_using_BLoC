@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:todos/data/repositpry/user_repo.dart';
@@ -11,15 +13,16 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   AuthBloc({required this.userRepository}) : super(AuthInitial()) {
     on<LoginEvent>((event, emit) async {
       emit(AuthLoading());
-      Future.delayed(Duration(seconds: 2));
+      await Future.delayed(const Duration(seconds: 3));
       try {
-        Map<String, dynamic>? data = await userRepository.loginUser(
+        print('object');
+        Map<String, dynamic> data = await userRepository.loginUser(
           {
             'email': event.email,
             'password': event.password,
           },
         );
-        if (data!.containsKey('user')) {
+        if (data.containsKey('user')) {
           emit(
             AuthSuccess(
               user: User.fromJson(data['user']),

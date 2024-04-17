@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:todos/bloc/authbloc/auth_bloc.dart';
 import 'package:todos/bloc/homebloc/home_bloc.dart';
 import 'package:todos/data/repositpry/home_repo.dart';
@@ -7,7 +8,12 @@ import 'package:todos/data/repositpry/user_repo.dart';
 import 'package:todos/presentation/pallets/app_colors.dart';
 import 'package:todos/presentation/view/pages/get_started.dart';
 
-void main() {
+late SharedPreferences prefs; 
+
+void main() async{
+  WidgetsFlutterBinding.ensureInitialized();
+  
+  prefs = await SharedPreferences.getInstance();
   runApp(const MyApp());
 }
 
