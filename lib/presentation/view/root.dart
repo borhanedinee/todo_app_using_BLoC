@@ -81,6 +81,7 @@ class _RootScreenState extends State<RootScreen> {
                   .withOpacity(currentIndex == 1 ? 1 : 0.4),
             ),
             onPressed: () {
+              //TODO: send event to agenda bloc
               setState(() {
                 currentIndex = 1;
               });
