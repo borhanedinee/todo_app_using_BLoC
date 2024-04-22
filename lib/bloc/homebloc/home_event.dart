@@ -8,3 +8,8 @@ class FetchHomeDataEvent extends HomeEvent{
 
   FetchHomeDataEvent({required this.userId});
 }
+
+class SortByChanged extends HomeEvent{
+  final String sortBy;
+  SortByChanged({required this.sortBy});
+}

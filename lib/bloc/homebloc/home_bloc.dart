@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:todos/data/repositpry/home_repo.dart';
@@ -9,29 +10,37 @@ part 'home_state.dart';
 class HomeBloc extends Bloc<HomeEvent, HomeState> {
   final HomeRepository taskRepository;
   HomeBloc({required this.taskRepository}) : super(HomeInitial()) {
-    on<FetchHomeDataEvent>((event, emit) async {
-      emit(HomeLoading());
-      await Future.delayed(
-        const Duration(seconds: 12),
+    on<FetchHomeDataEvent>(fetchHomeData);
+    on<SortByChanged>(sortByChanged);
+  }
+
+  FutureOr<void> fetchHomeData(event, emit) async {
+    emit(HomeLoading());
+    await Future.delayed(
+      const Duration(seconds: 12),
+    );
+    try {
+      var response = await taskRepository.fetchTask(event.userId);
+      emit(
+        HomeLoaded(
+          onGoingCount: response['onGoingCount'],
+          inProgressCount: response['inProgressCount'],
+          pendingCount: response['pendingCount'],
+          completedCount: response['completedCount'],
+          recentTaks: response['tasks'],
+        ),
       );
-      try {
-        var response = await taskRepository.fetchTask(event.userId);
-        emit(
-          HomeLoaded(
-            onGoingCount: response['onGoingCount'],
-            inProgressCount: response['inProgressCount'],
-            pendingCount: response['pendingCount'],
-            completedCount: response['completedCount'],
-            recentTaks: response['tasks'],
-          ),
-        );
-      } catch (e) {
-        emit(
-          HomeError(
-            error: e.toString(),
-          ),
-        );
-      }
-    });
+    } catch (e) {
+      emit(
+        HomeError(
+          error: e.toString(),
+        ),
+      );
+    }
+  }
+
+  FutureOr<void> sortByChanged(SortByChanged event, Emitter<HomeState> emit) {
+    //TODO: handle changedsort by event
+    print('sort by changed and sortbyid is :${event.sortBy}');
   }
 }

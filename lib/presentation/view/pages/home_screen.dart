@@ -118,7 +118,41 @@ class HomeScreen extends StatelessWidget {
                               ),
                               GestureDetector(
                                 onTap: () {
-                                  showDropDown();
+                                  showDialog(
+                                      context: context,
+                                      builder: (context) => AlertDialog(
+                                            content: Container(
+                                              height: 220,
+                                              width: size.width,
+                                              decoration: BoxDecoration(),
+                                              child: Column(
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.start,
+                                                children: [
+                                                  Text('sort by :'),
+                                                  SizedBox(
+                                                    height: 10,
+                                                  ),
+                                                  SortByItem(sortBy: 'Category'),
+                                                  SizedBox(
+                                                    height: 5,
+                                                  ),
+                                                  Divider(),
+                                                  SortByItem(sortBy: 'Status'),
+                                                  SizedBox(
+                                                    height: 5,
+                                                  ),
+                                                  Divider(),
+                                                  SortByItem(sortBy: 'Newer'),
+                                                  SizedBox(
+                                                    height: 5,
+                                                  ),
+                                                  Divider(),
+                                                  SortByItem(sortBy: 'Older'),
+                                                ],
+                                              ),
+                                            ),
+                                          ));
                                 },
                                 child: const Row(
                                   children: [
@@ -142,7 +176,7 @@ class HomeScreen extends StatelessWidget {
                           ...List.generate(state.recentTaks.length, (index) {
                             Task task = state.recentTaks[index];
                             return RecentTaskItem(
-                              task: task,
+                                task: task,
                                 completionPercentage: 0.4,
                                 numberOfCompletedSubTasks: 4,
                                 progressColor: Colors.orange);
@@ -180,6 +214,34 @@ class HomeScreen extends StatelessWidget {
                 ),
               ))
           .toList(),
+    );
+  }
+}
+
+class SortByItem extends StatelessWidget {
+  final String sortBy;
+
+  const SortByItem({
+    required this.sortBy,
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    var homeBloc = BlocProvider.of<HomeBloc>(context);
+    return InkWell(
+      onTap: () {
+        homeBloc.add(SortByChanged(sortBy: sortBy));
+        Navigator.of(context).pop();
+      },
+      child: Container(
+        width: size.width,
+        decoration: BoxDecoration(),
+        child: Text(
+          sortBy,
+          style: TextStyle(fontSize: 20),
+        ),
+      ),
     );
   }
 }
