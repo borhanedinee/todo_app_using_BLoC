@@ -295,9 +295,9 @@ class _AddNoteScreenState extends State<AddNoteScreen> {
                               !isCategoryNotSelected &&
                               !isStatusNotSelected) {
                             // do your stuff here
-                            print('things are validated for submission');
+                            logger.i('TODO: things are validated for submission');
                           } else {
-                            print('things are not validated for submission');
+                            logger.e('things are not validated for submission');
                           }
                         },
                         style: ButtonStyle(

@@ -120,6 +120,33 @@ class RecentTaskItem extends StatelessWidget {
                         ),
                       ),
                     ),
+                    FittedBox(
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+                        margin:
+                            const EdgeInsets.only(left: 8, right: 8, bottom: 0),
+                        decoration: BoxDecoration(
+                          color: switch (task.taskCategory!.toLowerCase()) {
+                            'studying' => Colors.teal,
+                            'coding' => Colors.indigo,
+                            'self dev' => Colors.amber,
+                            'meeting' => Colors.blue,
+                            '9adya' => Colors.red,
+                            String() => null,
+                          },
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        child: Center(
+                          child: Text(
+                            task.taskCategory!,
+                            style: const TextStyle(
+                              fontSize: 12,
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
                   ],
                 ),
               ],
