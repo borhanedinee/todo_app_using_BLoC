@@ -1,5 +1,6 @@
 import 'package:todos/data/network/task_api.dart';
 import 'package:todos/domain/models/task.dart';
+import 'package:todos/main.dart';
 
 class HomeRepository {
   //FETCH TASKS BY USER ID
@@ -41,6 +42,19 @@ class HomeRepository {
     }
   }
 
+  //SORT TASKS
+  sortTask(String sortBy) async {
+    try {
+      List response = await TaskAPI.sortTask(sortBy);
+      List<Task> sortedTasks = [];
+      for (var element in response) {
+        sortedTasks.add(Task.fromJson(element));
+      }
+      return sortedTasks;
+    } catch (e) {
+      print(e.toString());
+    }
+  }
   //ADD TASK
   addTask(Task task) async {
     try {

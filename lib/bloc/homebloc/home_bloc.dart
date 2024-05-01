@@ -3,6 +3,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:todos/data/repositpry/home_repo.dart';
 import 'package:todos/domain/models/task.dart';
+import 'package:todos/main.dart';
 
 part 'home_event.dart';
 part 'home_state.dart';
@@ -39,8 +40,13 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     }
   }
 
-  FutureOr<void> sortByChanged(SortByChanged event, Emitter<HomeState> emit) {
+  FutureOr<void> sortByChanged(
+      SortByChanged event, Emitter<HomeState> emit) async {
     //TODO: handle changedsort by event
-    print('sort by changed and sortbyid is :${event.sortBy}');
+    try {
+      List<Task> sortedTasks = await taskRepository.sortTask(event.sortBy);
+      HomeLoaded statee = state as HomeLoaded;
+      emit(statee.copyWith(recentTasks: sortedTasks));
+    } catch (e) {}
   }
 }

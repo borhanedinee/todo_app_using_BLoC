@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:http/http.dart' as http;
 import 'package:todos/domain/models/task.dart';
+import 'package:todos/main.dart';
 import 'package:todos/utils/constants.dart';
 
 class TaskAPI {
@@ -26,6 +27,31 @@ class TaskAPI {
     }
   }
 
+  //sort tasks
+  static sortTask(sortBy)async{
+    try {
+      
+      logger.i('u are hereeeeeeeee and $sortBy ');
+      var req = await  http.post(
+        Uri.parse(
+          '${Constants.baseUrl}/api/tasks/sortTasks/',
+        ),
+        body: json.encode({
+          'sortBy' : sortBy,
+          'userid' : prefs.getInt('userid')
+        }),
+        headers: {
+          'Content-Type': 'application/json ; charset=UTF-8',
+        },
+      );
+      if(req.statusCode == 200){
+        List<dynamic> response = json.decode(req.body);
+        return response;
+      }
+    } catch (e) {
+      print(e.toString());
+    }
+  }
   //fetch tasks
   static fetchTask(userId) async {
     try {

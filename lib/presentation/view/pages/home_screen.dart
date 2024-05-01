@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -18,11 +20,12 @@ class HomeScreen extends StatelessWidget {
       child: Scaffold(
         body: BlocBuilder<HomeBloc, HomeState>(
           builder: (context, state) {
-            if (state is HomeError)
+            if (state is HomeError) {
               return Text(
                 state.error,
-                style: TextStyle(color: Colors.white, fontSize: 30),
+                style: const TextStyle(color: Colors.white, fontSize: 30),
               );
+            }
             return SizedBox(
               width: size.width,
               child: SingleChildScrollView(
@@ -56,6 +59,7 @@ class HomeScreen extends StatelessWidget {
                                         numOfTasks: state.onGoingCount,
                                         color: Colors.blue),
                                   const SizedBox(
+                                    
                                     width: 10,
                                   ),
                                   if (state is HomeLoading)
@@ -124,12 +128,15 @@ class HomeScreen extends StatelessWidget {
                                             content: Container(
                                               height: 220,
                                               width: size.width,
-                                              decoration: BoxDecoration(),
-                                              child: Column(
+                                              decoration: const BoxDecoration(),
+                                              child: const Column(
                                                 crossAxisAlignment:
                                                     CrossAxisAlignment.start,
                                                 children: [
-                                                  Text('sort by :'),
+                                                  Text('sort by :' , style: TextStyle(
+                                                    fontWeight: FontWeight.bold,
+                                                    fontSize: 16
+                                                  ),),
                                                   SizedBox(
                                                     height: 10,
                                                   ),
@@ -167,12 +174,12 @@ class HomeScreen extends StatelessWidget {
                         const SizedBox(
                           height: 10,
                         ),
-                        if (state is HomeLoading)
+                        if (state is HomeLoading || state is TasksLoading)
                           Container(
                               height: 200,
                               child: const Center(
                                   child: CircularProgressIndicator())),
-                        if (state is HomeLoaded)
+                        if (state is HomeLoaded )
                           ...List.generate(state.recentTaks.length, (index) {
                             Task task = state.recentTaks[index];
                             return RecentTaskItem(
@@ -231,15 +238,16 @@ class SortByItem extends StatelessWidget {
     var homeBloc = BlocProvider.of<HomeBloc>(context);
     return InkWell(
       onTap: () {
+        logger.f(sortBy);
         homeBloc.add(SortByChanged(sortBy: sortBy));
         Navigator.of(context).pop();
       },
       child: Container(
         width: size.width,
-        decoration: BoxDecoration(),
+        decoration: const BoxDecoration(),
         child: Text(
           sortBy,
-          style: TextStyle(fontSize: 20),
+          style: const TextStyle(fontSize: 20),
         ),
       ),
     );

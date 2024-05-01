@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:logger/logger.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:todos/bloc/authbloc/auth_bloc.dart';
 import 'package:todos/bloc/homebloc/home_bloc.dart';
@@ -18,6 +19,7 @@ void main() async{
 }
 
 late Size size;
+Logger logger = Logger();
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
