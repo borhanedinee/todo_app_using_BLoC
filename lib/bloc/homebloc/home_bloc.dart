@@ -3,7 +3,6 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:todos/data/repositpry/home_repo.dart';
 import 'package:todos/domain/models/task.dart';
-import 'package:todos/main.dart';
 
 part 'home_event.dart';
 part 'home_state.dart';
