@@ -1,14 +1,19 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:intl/intl.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
+import 'package:todos/bloc/homebloc/home_bloc.dart';
 import 'package:todos/domain/models/task.dart';
 import 'package:todos/main.dart';
+import 'package:todos/presentation/view/pages/edit_screen.dart';
+import 'package:todos/presentation/view/root.dart';
 
-class TaskDetailsScreen extends StatefulWidget {
+class TaskDetailsScreen extends StatelessWidget {
   final double completionPercentage;
 
   final int numberOfCompletedSubTasks;
 
-final Task task;
+  final Task task;
 
   final Color progressColor;
 
@@ -20,14 +25,9 @@ final Task task;
       required this.progressColor});
 
   @override
-  State<TaskDetailsScreen> createState() => _TaskDetailsScreenState();
-}
-
-class _TaskDetailsScreenState extends State<TaskDetailsScreen> {
-  bool? subtaskDone = false;
-
-  @override
   Widget build(BuildContext context) {
+    
+    final homeBloc = BlocProvider.of<HomeBloc>(context);
     return SafeArea(
       child: Scaffold(
         body: Container(
@@ -35,15 +35,27 @@ class _TaskDetailsScreenState extends State<TaskDetailsScreen> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Padding(
-                padding: const EdgeInsets.only(left: 10, top: 10),
-                child: IconButton(
-                  onPressed: () {
-                    Navigator.of(context).pop();
-                  },
-                  icon: const Icon(
-                    Icons.navigate_before,
-                    size: 40,
-                  ),
+                padding: const EdgeInsets.only(left: 10, top: 10, right: 10),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    IconButton(
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                      },
+                      icon: const Icon(
+                        Icons.navigate_before,
+                        size: 40,
+                      ),
+                    ),
+                    IconButton(
+                      onPressed: () => menuDialog(context,homeBloc),
+                      icon: const Icon(
+                        Icons.more_vert,
+                        size: 40,
+                      ),
+                    ),
+                  ],
                 ),
               ),
               const SizedBox(
@@ -57,39 +69,40 @@ class _TaskDetailsScreenState extends State<TaskDetailsScreen> {
                       Padding(
                         padding: const EdgeInsets.only(left: 20, bottom: 20),
                         child: Text(
-                          widget.task.taskTitle!,
+                          task.taskTitle!,
                           style: const TextStyle(
                             fontSize: 26,
+                            color: Colors.grey,
                             fontWeight: FontWeight.bold,
                           ),
                         ),
                       ),
                       FittedBox(
-                      child: Container(
-                        
-                        padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 5),
-                        margin:
-                            const EdgeInsets.only(left: 20, right: 8, bottom: 20),
-                        decoration: BoxDecoration(
-                          color: switch (widget.task.taskStatus!.toLowerCase()) {
-                            'on going' => Colors.blue,
-                            'in progress' => Colors.teal,
-                            'pending' => Colors.amber,
-                            String() => null,
-                          },
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                        child: Center(
-                          child: Text(
-                           widget.task.taskStatus!,
-                            style: const TextStyle(
-                              fontSize: 14,
-                              fontWeight: FontWeight.w600,
+                        child: Container(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 15, vertical: 5),
+                          margin: const EdgeInsets.only(
+                              left: 20, right: 8, bottom: 20),
+                          decoration: BoxDecoration(
+                            color: switch (task.taskStatus!.toLowerCase()) {
+                              'on going' => Colors.blue,
+                              'in progress' => Colors.teal,
+                              'pending' => Colors.amber,
+                              String() => null,
+                            },
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          child: Center(
+                            child: Text(
+                              task.taskStatus!,
+                              style: const TextStyle(
+                                fontSize: 14,
+                                fontWeight: FontWeight.w600,
+                              ),
                             ),
                           ),
                         ),
                       ),
-                    ),
                       const Padding(
                         padding: EdgeInsets.only(
                           left: 20,
@@ -104,9 +117,11 @@ class _TaskDetailsScreenState extends State<TaskDetailsScreen> {
                         padding: const EdgeInsets.only(
                             left: 20, top: 10, bottom: 20),
                         width: size.width,
-                        child: const Text(
-                          'lazm 3liya nkml this task before june , start with front end and implement it very well then pass to the backend. \n   \nby ending thsi task yoz will have your first project in the professional career done.\n\nOrganize a meeting with the client time a week to manage any changes ect',
-                          style: TextStyle(color: Colors.grey),
+                        child: Text(
+                          task.taskDetails == ''
+                              ? 'No task details'
+                              : task.taskDetails!,
+                          style: const TextStyle(color: Colors.grey),
                         ),
                       ),
                       Padding(
@@ -130,15 +145,20 @@ class _TaskDetailsScreenState extends State<TaskDetailsScreen> {
                                       children: [
                                         const Icon(Icons.alarm),
                                         const SizedBox(
-                                          width: 20,
+                                          width: 15,
                                         ),
                                         RichText(
-                                          text: const TextSpan(
+                                          text: TextSpan(
                                             children: [
-                                              TextSpan(text: 'Deadline:'),
+                                              const TextSpan(
+                                                  text: 'Deadline : '),
                                               TextSpan(
-                                                text: '  June 01',
-                                                style: TextStyle(
+                                                text: task.taskDeadline == ''
+                                                    ? 'not deadlined'
+                                                    : formatDateTime(
+                                                        DateTime.parse(task
+                                                            .taskDeadline!)),
+                                                style: const TextStyle(
                                                     fontWeight:
                                                         FontWeight.bold),
                                               ),
@@ -162,17 +182,18 @@ class _TaskDetailsScreenState extends State<TaskDetailsScreen> {
                               ],
                             ),
                             CircularPercentIndicator(
-                              progressColor: widget.progressColor,
+                              progressColor: progressColor,
                               radius: 34,
                               lineWidth: 6,
-                              percent: widget.completionPercentage,
+                              percent: completionPercentage,
                               circularStrokeCap: CircularStrokeCap.round,
                               curve: Curves.easeOut,
                               animation: true,
                               animationDuration: 2000,
                               center: Text(
-                                '${(widget.completionPercentage * 100).toInt()}%',
-                                style: const TextStyle(fontWeight: FontWeight.bold),
+                                '${(completionPercentage * 100).toInt()}%',
+                                style: const TextStyle(
+                                    fontWeight: FontWeight.bold),
                               ),
                             ),
                           ],
@@ -190,6 +211,96 @@ class _TaskDetailsScreenState extends State<TaskDetailsScreen> {
               ),
             ],
           ),
+        ),
+      ),
+    );
+  }
+
+  Future<dynamic> menuDialog(BuildContext context, HomeBloc homeBloc) {
+    return showDialog(
+      
+      context: context,
+      builder: (context) => AlertDialog(
+        alignment: Alignment.topRight,
+        content: Container(
+          height: 120,
+          width: 80,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              InkWell(
+                onTap: () {
+                  print('a weldi  ' + task.taskId.toString());
+                  Navigator.of(context).pushReplacement(
+                    MaterialPageRoute(
+                      builder: (context) => EditScreen(
+                        task: task,
+                      ),
+                    ),
+                  );
+                },
+                child: const Text(
+                  'Edit',
+                  style: TextStyle(
+                    fontSize: 16,
+                  ),
+                ),
+              ),
+              InkWell(
+                onTap: () {
+                  homeBloc.add(
+                    DeleteTask(taskId: task.taskId!),
+                  );
+                },
+                child: BlocConsumer<HomeBloc, HomeState>(
+                  listener: (context, state) {
+                    if (state is DeletedTaskState) {
+                      if (state.status == 'success') {
+                        homeBloc.add(FetchHomeDataEvent(
+                            userId: prefs.getInt('userid')!));
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                            content: const Text('Deleted successfully'),
+                          ),
+                        );
+                        
+                        Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => RootScreen(),));
+                        
+                      } else {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                            content:
+                                Text('Something went wrong, please try again'),
+                          ),
+                        );
+                      }
+                    }
+                  },
+                  builder: (context, state) {
+                    return const Text(
+                      'Delete',
+                      style: TextStyle(
+                        fontSize: 16,
+                      ),
+                    );
+                  },
+                ),
+              ),
+              InkWell(
+                child: const Text(
+                  'Pin',
+                  style: TextStyle(
+                    fontSize: 16,
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+        backgroundColor: Colors.blueGrey,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(10),
         ),
       ),
     );
@@ -216,16 +327,17 @@ class _TaskDetailsScreenState extends State<TaskDetailsScreen> {
               ),
             ),
             Checkbox(
-              value: subtaskDone,
-              onChanged: (value) {
-                setState(() {
-                  subtaskDone = value;
-                });
-              },
+              value: true,
+              onChanged: (value) {},
             )
           ],
         ),
       ),
     );
+  }
+
+  String formatDateTime(DateTime dateTime) {
+    String formattedDate = DateFormat('dd MMMM').format(dateTime);
+    return formattedDate;
   }
 }

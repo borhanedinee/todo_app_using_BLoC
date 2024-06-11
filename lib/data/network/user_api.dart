@@ -7,6 +7,7 @@ class UserAPI {
   //LOG IN
   static Future<dynamic> logUserIn(map) async {
     try {
+      print(map.toString());
       var result = await http.post(
         Uri.parse('${Constants.baseUrl}/api/getuser/'),
         body: json.encode(map),

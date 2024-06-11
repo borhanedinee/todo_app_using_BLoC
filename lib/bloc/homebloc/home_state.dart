@@ -7,11 +7,20 @@ final class HomeInitial extends HomeState {}
 
 final class HomeLoading extends HomeState {}
 
+final class SortbyLoading extends HomeState {}
+final class DeletedTaskState extends HomeState {
+  final String status;
+
+  DeletedTaskState({required this.status});
+}
+
 final class HomeLoaded extends HomeState {
   final int onGoingCount;
   final int inProgressCount;
   final int pendingCount;
   final int completedCount;
+
+  final String currentSortByStatus;
 
   final List<Task> recentTaks;
 
@@ -21,23 +30,8 @@ final class HomeLoaded extends HomeState {
     required this.pendingCount,
     required this.completedCount,
     required this.recentTaks,
+    required this.currentSortByStatus,
   });
-
-  HomeLoaded copyWith({
-    int? onGoingCount,
-    int? inProgressCount,
-    int? pendingCount,
-    int? completedCount,
-    List<Task>? recentTasks,
-  }) {
-    return HomeLoaded(
-      onGoingCount: onGoingCount ?? this.onGoingCount,
-      inProgressCount: inProgressCount ?? this.inProgressCount,
-      pendingCount: pendingCount ?? this.pendingCount,
-      completedCount: completedCount ?? this.completedCount,
-      recentTaks: recentTasks ?? recentTaks, 
-    );
-  }
 }
 
 final class SortByLoaded extends HomeState{

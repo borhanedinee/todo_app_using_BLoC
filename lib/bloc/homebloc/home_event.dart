@@ -9,6 +9,14 @@ class FetchHomeDataEvent extends HomeEvent{
   FetchHomeDataEvent({required this.userId});
 }
 
+class DeleteTask extends HomeEvent{
+  final int taskId;
+
+  DeleteTask({required this.taskId});
+}
+
+
+
 class SortByChanged extends HomeEvent{
   final String sortBy;
   SortByChanged({required this.sortBy});

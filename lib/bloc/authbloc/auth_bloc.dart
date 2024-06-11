@@ -14,24 +14,24 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       emit(AuthLoading());
       await Future.delayed(const Duration(seconds: 3));
       try {
-        Map<String, dynamic> data = await userRepository.loginUser(
+        User? user = await userRepository.loginUser(
           {
             'email': event.email,
             'password': event.password,
           },
         );
-        if (data.containsKey('user')) {
+        if (user != null) {
           emit(
             AuthSuccess(
-              user: User.fromJson(data['user']),
-              message: data['message'],
+              user: user,
+              message: 'Signed in successfully',
             ),
           );
         } else {
           emit(
             AuthSuccess(
               user: null,
-              message: data['message'],
+              message: 'User not found',
             ),
           );
         }

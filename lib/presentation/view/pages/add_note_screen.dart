@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import 'package:omni_datetime_picker/omni_datetime_picker.dart';
+import 'package:todos/bloc/addtaskbloc/addtask_bloc.dart';
+import 'package:todos/bloc/homebloc/home_bloc.dart';
+import 'package:todos/domain/models/task.dart';
 import 'package:todos/main.dart';
 import 'package:todos/presentation/pallets/app_colors.dart';
 
@@ -19,6 +23,14 @@ class _AddNoteScreenState extends State<AddNoteScreen> {
   var taskTitleController = TextEditingController();
 
   var taskDetailsController = TextEditingController();
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+    deadlineController.dispose();
+    taskTitleController.dispose();
+    taskDetailsController.dispose();
+  }
 
   var categories = [
     'Studying',
@@ -29,13 +41,24 @@ class _AddNoteScreenState extends State<AddNoteScreen> {
     'Others'
   ];
   var statusList = [
-    'On Going',
-    'In Progress',
-    'Pending',
+    'Weekly',
+    'Monthly',
+    'Deadlined',
+  ];
+  List<String> selectedDays = [];
+
+  List<String> daysOfWeek = [
+    'Monday',
+    'Tuesday',
+    'Wednesday',
+    'Thursday',
+    'Friday',
+    'Saturday',
+    'Sunday',
   ];
 
   String? selectedCategory;
-  String? selectedStatus;
+  String? selectedStatus = 'Weekly';
 
   bool isStatusNotSelected = false;
   bool isCategoryNotSelected = false;
@@ -43,6 +66,8 @@ class _AddNoteScreenState extends State<AddNoteScreen> {
   bool titleValidated = false;
   @override
   Widget build(BuildContext context) {
+    final homeBloc = BlocProvider.of<HomeBloc>(context);
+    final addtaskbloc = BlocProvider.of<AddtaskBloc>(context);
     return SafeArea(
       child: Scaffold(
         body: Column(
@@ -88,33 +113,11 @@ class _AddNoteScreenState extends State<AddNoteScreen> {
                               },
                               controller: taskTitleController,
                               decoration: InputDecoration(
+                                  contentPadding: const EdgeInsets.symmetric(
+                                      vertical: 12, horizontal: 10),
                                   border: OutlineInputBorder(
                                       borderRadius: BorderRadius.circular(20)),
                                   hintText: 'Task title'),
-                            ),
-                            const SizedBox(
-                              height: 20,
-                            ),
-                            TextFormField(
-                              controller: deadlineController,
-                              decoration: InputDecoration(
-                                border: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(20)),
-                                hintText: 'Deadline ( optional )',
-                                suffixIcon: IconButton(
-                                  onPressed: () async {
-                                    DateTime? dateTime =
-                                        await showOmniDateTimePicker(
-                                            context: context);
-
-                                    setState(() {
-                                      deadlineController.text =
-                                          dateTimeToString(dateTime);
-                                    });
-                                  },
-                                  icon: const Icon(Icons.keyboard_arrow_down),
-                                ),
-                              ),
                             ),
                             const SizedBox(
                               height: 20,
@@ -129,6 +132,7 @@ class _AddNoteScreenState extends State<AddNoteScreen> {
                                 expands: true,
                                 decoration: InputDecoration(
                                     border: OutlineInputBorder(
+                                        borderSide: const BorderSide(width: 0),
                                         borderRadius:
                                             BorderRadius.circular(20)),
                                     hintText:
@@ -177,31 +181,141 @@ class _AddNoteScreenState extends State<AddNoteScreen> {
                                 });
                               },
                               child: Container(
-                                padding: const EdgeInsets.all(8),
+                                padding: const EdgeInsets.all(10),
                                 margin: const EdgeInsets.only(
                                     left: 8, right: 8, bottom: 8),
                                 decoration: BoxDecoration(
                                   color: selectedStatus == status
-                                      ? AppColors.primaryColor.withOpacity(0.8)
+                                      ? Colors.grey.shade900
                                       : switch (status) {
-                                          'On Going' => Colors.blue,
-                                          'In Progress' => Colors.teal,
-                                          'Pending' => Colors.yellow.shade700,
+                                          'Weekly' => Colors.indigo,
+                                          'Monthly' => Colors.teal,
+                                          'Deadlined' => Colors.cyan,
                                           String() => null,
                                         },
                                   border: selectedStatus == status
                                       ? Border.all(
-                                          width: 1, color: Colors.white)
+                                          width: 2, color: Colors.white)
                                       : null,
                                   borderRadius: BorderRadius.circular(10),
                                 ),
-                                child: Center(child: Text(status)),
+                                child: Center(
+                                    child: Text(
+                                  status,
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 16),
+                                )),
                               ),
                             ),
                           );
                         }).toList(),
                       ),
                     ),
+                    selectedStatus == null || selectedStatus == 'Weekly'
+                        ? Padding(
+                            padding: const EdgeInsets.only(
+                                left: 12, right: 20, bottom: 20),
+                            child: Wrap(
+                              children: daysOfWeek.map((day) {
+                                return FittedBox(
+                                  child: GestureDetector(
+                                    onTap: () {
+                                      // Handle category selection here
+
+                                      selectedDays.contains(day)
+                                          ? selectedDays.remove(day)
+                                          : selectedDays.add(day);
+                                      setState(() {});
+                                    },
+                                    child: Container(
+                                      padding: const EdgeInsets.all(8),
+                                      margin: const EdgeInsets.only(
+                                          left: 8, right: 8, bottom: 8),
+                                      decoration: BoxDecoration(
+                                        color: selectedDays.contains(day)
+                                            ? Colors.grey.shade900
+                                            : Colors.grey[800],
+                                        border: selectedDays.contains(day)
+                                            ? Border.all(
+                                                width: 1, color: Colors.white)
+                                            : null,
+                                        borderRadius: BorderRadius.circular(10),
+                                      ),
+                                      child: Center(child: Text(day)),
+                                    ),
+                                  ),
+                                );
+                              }).toList(),
+                            ),
+                          )
+                        : selectedStatus == 'Monthly'
+                            ? Padding(
+                                padding: const EdgeInsets.only(
+                                    left: 15, right: 15, bottom: 30),
+                                child: TextFormField(
+                                  controller: deadlineController,
+                                  readOnly: true,
+                                  decoration: InputDecoration(
+                                    contentPadding: const EdgeInsets.symmetric(
+                                        vertical: 12, horizontal: 10),
+                                    border: OutlineInputBorder(
+                                        borderRadius:
+                                            BorderRadius.circular(20)),
+                                    hintText: 'Repetitive date',
+                                    suffixIcon: IconButton(
+                                      onPressed: () async {
+                                        DateTime dateTime =
+                                            await showOmniDateTimePicker(
+                                                    context: context) ??
+                                                DateTime.now();
+                                        setState(
+                                          () {
+                                            deadlineController.text =
+                                                dateTimeToString(dateTime) ??
+                                                    '';
+                                          },
+                                        );
+                                      },
+                                      icon:
+                                          const Icon(Icons.keyboard_arrow_down),
+                                    ),
+                                  ),
+                                ),
+                              )
+                            : Padding(
+                                padding: const EdgeInsets.only(
+                                    left: 15, right: 15, bottom: 30),
+                                child: TextFormField(
+                                  controller: deadlineController,
+                                  readOnly: true,
+                                  decoration: InputDecoration(
+                                    contentPadding: const EdgeInsets.symmetric(
+                                        vertical: 12, horizontal: 10),
+                                    border: OutlineInputBorder(
+                                        borderRadius:
+                                            BorderRadius.circular(20)),
+                                    hintText: 'Deadline',
+                                    suffixIcon: IconButton(
+                                      onPressed: () async {
+                                        DateTime dateTime =
+                                            await showOmniDateTimePicker(
+                                                    context: context) ??
+                                                DateTime.now();
+                                        setState(
+                                          () {
+                                            deadlineController.text =
+                                                dateTimeToString(dateTime) ??
+                                                    '';
+                                          },
+                                        );
+                                      },
+                                      icon:
+                                          const Icon(Icons.keyboard_arrow_down),
+                                    ),
+                                  ),
+                                ),
+                              ),
                     Padding(
                       padding: const EdgeInsets.only(left: 20, bottom: 20),
                       child: RichText(
@@ -245,11 +359,11 @@ class _AddNoteScreenState extends State<AddNoteScreen> {
                                     left: 8, right: 8, bottom: 8),
                                 decoration: BoxDecoration(
                                   color: selectedCategory == category
-                                      ? AppColors.primaryColor.withOpacity(0.8)
+                                      ? Colors.grey.shade900
                                       : Colors.grey[800],
                                   border: selectedCategory == category
                                       ? Border.all(
-                                          width: 1, color: Colors.white)
+                                          width: 2, color: Colors.white)
                                       : null,
                                   borderRadius: BorderRadius.circular(10),
                                 ),
@@ -262,6 +376,7 @@ class _AddNoteScreenState extends State<AddNoteScreen> {
                     ),
                     Container(
                       width: size.width,
+                      padding: const EdgeInsets.only(bottom: 30),
                       margin: const EdgeInsets.only(right: 20, left: 20),
                       child: ElevatedButton(
                         onPressed: () async {
@@ -295,9 +410,18 @@ class _AddNoteScreenState extends State<AddNoteScreen> {
                               !isCategoryNotSelected &&
                               !isStatusNotSelected) {
                             // do your stuff here
-                            logger.i('TODO: things are validated for submission');
+                            addtaskbloc.add(AddingTaskEvent(
+                                task: Task(
+                                    taskCategory: selectedCategory,
+                                    taskDeadline: deadlineController.text,
+                                    taskDetails: taskDetailsController.text,
+                                    taskStatus: selectedStatus,
+                                    taskTitle: taskTitleController.text,
+                                    taskUser: prefs.getInt('userid')),
+                                selectedDays: selectedDays));
                           } else {
                             logger.e('things are not validated for submission');
+                            logger.i(selectedDays.toString());
                           }
                         },
                         style: ButtonStyle(
@@ -313,10 +437,44 @@ class _AddNoteScreenState extends State<AddNoteScreen> {
                             ),
                           ),
                         ),
-                        child: const Text(
-                          'Create task',
-                          style: TextStyle(
-                              color: Colors.white, fontWeight: FontWeight.bold),
+                        child: BlocConsumer<AddtaskBloc, AddtaskState>(
+                          listener: (context, state) {
+                            if (state is AddTaskError) {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(
+                                  content: Text(
+                                      'Something went wrong, please try again'),
+                                ),
+                              );
+                            }
+                            if (state is AddTaskSuccess) {
+                              homeBloc.add(
+                                FetchHomeDataEvent(
+                                    userId: prefs.getInt('userid')!),
+                              );
+                              Navigator.of(context).pop();
+                              //TODO: HANDLE NAVIGATION TO HOME PAGE AFTER ADDING TASK
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(
+                                  content: Text('Task added successfully'),
+                                ),
+                              );
+                            }
+                          },
+                          builder: (context, state) {
+                            if (state is AddTaskLoading) {
+                              return const CircularProgressIndicator(
+                                color: Colors.white,
+                              );
+                            } else {
+                              return const Text(
+                                'Create',
+                                style: TextStyle(
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.bold),
+                              );
+                            }
+                          },
                         ),
                       ),
                     ),
@@ -331,6 +489,6 @@ class _AddNoteScreenState extends State<AddNoteScreen> {
   }
 }
 
-String dateTimeToString(DateTime? dateTime) {
-  return DateFormat('dd-MM-yyyy hh:mma').format(dateTime!);
+String? dateTimeToString(DateTime dateTime) {
+  return DateFormat('yyyy-MM-dd hh:mm:ss').format(dateTime);
 }

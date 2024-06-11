@@ -1,4 +1,3 @@
-
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -13,6 +12,8 @@ import 'package:todos/presentation/view/components/home_components/recent_task_i
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
 
+  // TODO: HANDLE THE LOADIG THE STATE OF SORTING BY
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -20,165 +21,123 @@ class HomeScreen extends StatelessWidget {
         body: BlocBuilder<HomeBloc, HomeState>(
           builder: (context, state) {
             if (state is HomeError) {
+              // error fetching tasks of logged user
               return Text(
                 state.error,
                 style: const TextStyle(color: Colors.white, fontSize: 30),
               );
             }
-            return SizedBox(
-              width: size.width,
-              child: SingleChildScrollView(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    // APP BAR
-                    const CustomAppBar(
-                      user: 'Borhan',
-                    ),
+            if (state is HomeLoading) {
+              return const Center(
+                child: CircularProgressIndicator(),
+              );
+            }
+            if (state is HomeLoaded) {
+              return SizedBox(
+                width: size.width,
+                child: SingleChildScrollView(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      // APP BAR
+                      CustomAppBar(
+                        user: prefs.getString('username')!,
+                      ),
 
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        //TODOS STATUSSSSSSSSSSSSSSSS
-                        Container(
-                          margin: const EdgeInsets.only(top: 30),
-                          width: size.width,
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  if (state is HomeLoading)
-                                    const CircularProgressIndicator(),
-                                  if (state is HomeLoaded)
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          //TODOS STATUSSSSSSSSSSSSSSSS
+                          Container(
+                            margin: const EdgeInsets.only(top: 30),
+                            width: size.width,
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
                                     TaskStatusItem(
                                         icon: Icons.refresh_outlined,
-                                        status: 'On going',
+                                        status: 'Weekly',
                                         numOfTasks: state.onGoingCount,
-                                        color: Colors.blue),
-                                  const SizedBox(
-                                    
-                                    width: 10,
-                                  ),
-                                  if (state is HomeLoading)
-                                    const CircularProgressIndicator(),
-                                  if (state is HomeLoaded)
+                                        color: Colors.indigo),
+                                    const SizedBox(
+                                      width: 10,
+                                    ),
                                     TaskStatusItem(
                                       icon: Icons.access_time,
-                                      status: 'In progress',
+                                      status: 'Monthly',
                                       numOfTasks: state.inProgressCount,
                                       color: Colors.teal,
                                     )
-                                ],
-                              ),
-                              const SizedBox(
-                                height: 10,
-                              ),
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  if (state is HomeLoading)
-                                    const CircularProgressIndicator(),
-                                  if (state is HomeLoaded)
+                                  ],
+                                ),
+                                const SizedBox(
+                                  height: 10,
+                                ),
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
                                     TaskStatusItem(
                                         icon: Icons.pending_actions_outlined,
-                                        status: 'Pending',
+                                        status: 'Deadlined',
                                         numOfTasks: state.pendingCount,
-                                        color: Colors.yellow),
-                                  const SizedBox(
-                                    width: 10,
-                                  ),
-                                  if (state is HomeLoading)
-                                    const CircularProgressIndicator(),
-                                  if (state is HomeLoaded)
+                                        color: Colors.cyan),
+                                    const SizedBox(
+                                      width: 10,
+                                    ),
                                     TaskStatusItem(
                                       icon: Icons.done,
-                                      status: 'Completed',
+                                      status: 'All tasks',
                                       numOfTasks: state.completedCount,
                                       color: AppColors.primaryColor,
                                     )
-                                ],
-                              ),
-                            ],
-                          ),
-                        ),
-                        const SizedBox(
-                          height: 15,
-                        ),
-                        //RECENT TASKSSSSSSSSSSSSSSS
-                        Padding(
-                          padding: const EdgeInsets.only(left: 20, right: 20),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              const Text(
-                                'Recent Tasks',
-                                style: TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 18,
-                                    fontWeight: FontWeight.w500),
-                              ),
-                              GestureDetector(
-                                onTap: () {
-                                  showDialog(
-                                      context: context,
-                                      builder: (context) => AlertDialog(
-                                            content: Container(
-                                              height: 220,
-                                              width: size.width,
-                                              decoration: const BoxDecoration(),
-                                              child: const Column(
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.start,
-                                                children: [
-                                                  Text('sort by :' , style: TextStyle(
-                                                    fontWeight: FontWeight.bold,
-                                                    fontSize: 16
-                                                  ),),
-                                                  SizedBox(
-                                                    height: 10,
-                                                  ),
-                                                  SortByItem(sortBy: 'Category'),
-                                                  SizedBox(
-                                                    height: 5,
-                                                  ),
-                                                  Divider(),
-                                                  SortByItem(sortBy: 'Status'),
-                                                  SizedBox(
-                                                    height: 5,
-                                                  ),
-                                                  Divider(),
-                                                  SortByItem(sortBy: 'Newer'),
-                                                  SizedBox(
-                                                    height: 5,
-                                                  ),
-                                                  Divider(),
-                                                  SortByItem(sortBy: 'Older'),
-                                                ],
-                                              ),
-                                            ),
-                                          ));
-                                },
-                                child: const Row(
-                                  children: [
-                                    Text('Sort by'),
-                                    Icon(Icons.arrow_drop_down_sharp)
                                   ],
                                 ),
-                              )
-                            ],
+                              ],
+                            ),
                           ),
-                        ),
-                        const SizedBox(
-                          height: 10,
-                        ),
-                        if (state is HomeLoading || state is TasksLoading)
-                          Container(
+                          const SizedBox(
+                            height: 15,
+                          ),
+                          //RECENT TASKSSSSSSSSSSSSSSS
+                          Padding(
+                            padding: const EdgeInsets.only(left: 20, right: 20),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                const Text(
+                                  'Recent Tasks',
+                                  style: TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 18,
+                                      fontWeight: FontWeight.w500),
+                                ),
+                                InkWell(
+                                  onTap: () {
+                                    sortDialog(context);
+                                  },
+                                  child: Row(
+                                    children: [
+                                      Text(state.currentSortByStatus),
+                                      const Icon(Icons.arrow_drop_down_sharp)
+                                    ],
+                                  ),
+                                )
+                              ],
+                            ),
+                          ),
+                          const SizedBox(
+                            height: 10,
+                          ),
+                          if (state is SortbyLoading)
+                            const SizedBox(
                               height: 200,
-                              child: const Center(
-                                  child: CircularProgressIndicator())),
-                        if (state is HomeLoaded )
+                              child: Center(
+                                child: CircularProgressIndicator(),
+                              ),
+                            ),
                           ...List.generate(state.recentTaks.length, (index) {
                             Task task = state.recentTaks[index];
                             return RecentTaskItem(
@@ -187,16 +146,57 @@ class HomeScreen extends StatelessWidget {
                                 numberOfCompletedSubTasks: 4,
                                 progressColor: Colors.orange);
                           })
-                      ],
-                    )
-                  ],
+                        ],
+                      )
+                    ],
+                  ),
                 ),
-              ),
-            );
+              );
+            }
+            return Container();
           },
         ),
       ),
     );
+  }
+
+  Future<dynamic> sortDialog(BuildContext context) {
+    return showDialog(
+        context: context,
+        builder: (context) => const AlertDialog(
+              backgroundColor: Colors.blueGrey,
+              content: FittedBox(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'sort by :',
+                      style:
+                          TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                    ),
+                    SizedBox(
+                      height: 20,
+                    ),
+                    SortByItem(sortBy: 'Category'),
+                    SizedBox(
+                      height: 5,
+                    ),
+                    Divider(),
+                    SortByItem(sortBy: 'Status'),
+                    SizedBox(
+                      height: 5,
+                    ),
+                    Divider(),
+                    SortByItem(sortBy: 'Newer'),
+                    SizedBox(
+                      height: 5,
+                    ),
+                    Divider(),
+                    SortByItem(sortBy: 'Older'),
+                  ],
+                ),
+              ),
+            ));
   }
 
   DropdownButton2 showDropDown() {
@@ -237,7 +237,6 @@ class SortByItem extends StatelessWidget {
     var homeBloc = BlocProvider.of<HomeBloc>(context);
     return InkWell(
       onTap: () {
-        logger.f(sortBy);
         homeBloc.add(SortByChanged(sortBy: sortBy));
         Navigator.of(context).pop();
       },

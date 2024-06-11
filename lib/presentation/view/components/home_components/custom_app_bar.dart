@@ -1,12 +1,8 @@
-
 import 'package:flutter/material.dart';
 
 class CustomAppBar extends StatelessWidget {
   final String user;
-  const CustomAppBar({
-    super.key,
-    required this.user
-  });
+  const CustomAppBar({super.key, required this.user});
 
   @override
   Widget build(BuildContext context) {
@@ -18,8 +14,7 @@ class CustomAppBar extends StatelessWidget {
           Row(
             children: [
               const CircleAvatar(
-                backgroundImage:
-                    AssetImage('assets/images/boy.png'),
+                backgroundImage: AssetImage('assets/images/boy.png'),
               ),
               const SizedBox(
                 width: 20,
@@ -30,11 +25,16 @@ class CustomAppBar extends StatelessWidget {
                   Text(
                     'Hi, $user',
                     style: const TextStyle(
-                        color: Colors.white,
+                        color: Colors.grey,
                         fontSize: 18,
                         fontWeight: FontWeight.bold),
                   ),
-                  const Text('Your daily adventure starts now')
+                  const Text(
+                    'Your daily adventure starts now',
+                    style: TextStyle(
+                      fontSize: 12,
+                    color: Colors.grey),
+                  )
                 ],
               ),
             ],
@@ -44,6 +44,7 @@ class CustomAppBar extends StatelessWidget {
             icon: const Icon(
               Icons.widgets_outlined,
               size: 30,
+              color: Colors.grey,
             ),
           )
         ],
@@ -51,4 +52,3 @@ class CustomAppBar extends StatelessWidget {
     );
   }
 }
-

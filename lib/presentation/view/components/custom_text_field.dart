@@ -27,7 +27,9 @@ class CustomTextField extends StatelessWidget {
       child: TextFormField(
         validator: validator,
         controller: passwordController,
+        
         decoration: InputDecoration(
+          
           hintStyle: const TextStyle(fontSize: 14),
           hintText: hint,
           filled: true,
@@ -38,7 +40,7 @@ class CustomTextField extends StatelessWidget {
           fillColor: Colors.grey.shade800,
           border: InputBorder.none,
           contentPadding: const EdgeInsets.symmetric(
-            vertical: 15,
+            vertical: 7,
             horizontal: 10,
           ),
           suffixIcon: suffixIcon,

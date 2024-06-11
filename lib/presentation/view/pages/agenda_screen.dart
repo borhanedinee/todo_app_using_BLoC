@@ -1,11 +1,12 @@
+import 'package:calendar_view/calendar_view.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
-import 'package:todos/bloc/homebloc/home_bloc.dart';
+import 'package:todos/data/repositpry/home_repo.dart';
 import 'package:todos/domain/models/task.dart';
+import 'package:todos/main.dart';
 import 'package:todos/presentation/pallets/app_colors.dart';
-import 'package:todos/presentation/view/components/agenda_components/agenda_task_item.dart';
 import 'package:todos/presentation/view/components/custom_appbar.dart';
+import 'package:todos/presentation/view/pages/cell_screen.dart';
 
 class AgendaScreen extends StatefulWidget {
   const AgendaScreen({super.key});
@@ -15,171 +16,231 @@ class AgendaScreen extends StatefulWidget {
 }
 
 class _AgendaScreenState extends State<AgendaScreen> {
-  var currentSelectedDate = DateTime.now();
-  final List<DateTime> days = [
-    DateTime.now(),
-    DateTime.now().add(const Duration(days: 1)),
-    DateTime.now().add(const Duration(days: 2)),
-    DateTime.now().add(const Duration(days: 3)),
-    DateTime.now().add(const Duration(days: 4)),
-    DateTime.now().add(const Duration(days: 5)),
-    DateTime.now().add(const Duration(days: 6)),
-    DateTime.now().add(const Duration(days: 7)),
-    DateTime.now().add(const Duration(days: 8)),
-  ];
+  late EventController _controller;
+
+  HomeRepository homeRepository = HomeRepository();
+
+  List<Task> tasks = [];
+  List<CalendarEventData<Object?>> eventsToAdd = [];
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = EventController();
+  }
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Scaffold(
-        body: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            DefaultAppBar(title: 'Agenda'),
-            Padding(
-              padding: const EdgeInsets.only(left: 20, bottom: 30, top: 20),
-              child: Text(
-                formatDateTime(DateTime.now()),
-                style: const TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 20,
-                ),
-              ),
-            ),
-            SingleChildScrollView(
-              physics: const BouncingScrollPhysics(
-                  decelerationRate: ScrollDecelerationRate.normal),
-              scrollDirection: Axis.horizontal,
-              child: Row(
-                children: List.generate(
-                  days.length,
-                  (index) {
-                    return GestureDetector(
-                      onTap: () {
-                        setState(() {
-                          currentSelectedDate = days[index];
-                        });
-                      },
-                      child: Container(
-                        height: 100,
-                        width: 60,
-                        margin: const EdgeInsets.only(left: 10),
-                        decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(20),
-                            color: formatDateTime(currentSelectedDate) ==
-                                    formatDateTime(days[index])
-                                ? AppColors.primaryColor
-                                : Colors.grey.shade900),
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          children: [
-                            Text(dayInThreeLetters(days[index])),
-                            Text(
-                              dayInNumbers(days[index]),
-                              style: const TextStyle(
-                                fontWeight: FontWeight.bold,
-                                fontSize: 20,
-                              ),
-                            )
-                          ],
+    return Scaffold(
+      body: FutureBuilder(
+        future: homeRepository.fetchTask(prefs.getInt('userid')),
+        builder: (context, snapshot) {
+          if (snapshot.hasData) {
+            Map data = snapshot.data as Map;
+
+            tasks = data['tasks'];
+
+            eventsToAdd = tasks.map((task) {
+              return CalendarEventData(
+                  title: task.taskTitle!,
+                  date:  DateTime.parse(task.taskDeadline!),
+                  endDate: DateTime.tryParse('2024-06-14'),
+                  startTime: DateTime(0,0,0,17,00),
+                  color: switch (task.taskCategory!.toLowerCase()) {
+                    'studying' => Colors.indigo,
+                    'coding' => Colors.deepOrange,
+                    'self dev' => Colors.green,
+                    'others' => Colors.cyan,
+                    'meeting' => Colors.yellowAccent,
+                    String() => Colors.lightGreen,
+                  });
+            }).toList();
+            _controller.addAll(eventsToAdd);
+          }
+
+          return snapshot.connectionState == ConnectionState.waiting
+              ? const Center(
+                  child: Text('Loading ...'),
+                )
+              : Container(
+                  height: size.height,
+                  width: size.width,
+                  padding: const EdgeInsets.only(top: 20),
+                  child: Column(
+                    children: [
+                      const DefaultAppBar(title: 'Agenda'),
+                      Expanded(
+                        child: CalendarView(
+                          filteredTasks: tasks,
+                          controller: _controller,
+                          eventsToAdd: eventsToAdd,
                         ),
-                      ),
-                    );
-                  },
-                ),
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.only(top: 30, left: 15, bottom: 20),
-              child: RichText(
-                text: TextSpan(
-                  children: [
-                    const TextSpan(
-                      text: 'Tasks for  ',
-                      style: TextStyle(
-                        fontSize: 16,
-                        color: Colors.grey,
-                        fontFamily: 'Bai Jamjuree',
-                      ),
-                    ),
-                    if (formatDateTime(currentSelectedDate) ==
-                        formatDateTime(DateTime.now()))
-                      const TextSpan(
-                        text: 'Today  ',
-                        style: TextStyle(
-                            fontSize: 20,
-                            color: Colors.grey,
-                            fontWeight: FontWeight.bold,
-                            fontFamily: 'Bai Jamjuree'),
-                      ),
-                    TextSpan(
-                      text: formatDateTime(currentSelectedDate) ==
-                              formatDateTime(DateTime.now())
-                          ? '- ${formatDateTime(currentSelectedDate)} -'
-                          : formatDateTime(currentSelectedDate),
-                      style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: formatDateTime(currentSelectedDate) ==
-                                  formatDateTime(DateTime.now())
-                              ? 16
-                              : 20,
-                          color: Colors.grey,
-                          fontFamily: 'Bai Jamjuree'),
-                    )
-                  ],
-                ),
-              ),
-            ),
-            BlocBuilder<HomeBloc, HomeState>(
-              builder: (context, state) {
-                if (state is HomeLoading) {
-                  return const SizedBox(
-                    height: 300,
-                    child: Center(
-                      child: Text('Loading ...'),
-                    ),
-                  );
-                }
-                if (state is HomeLoaded) {
-                  return Column(
-                    children: List.generate(state.recentTaks.length, (index) {
-                      Task task = state.recentTaks[index];
-                      return AgendaTaskItem(
-                          task: task,
-                          completionPercentage: 0.6,
-                          progressColor: Colors.blue);
-                    }).take(3).toList(),
-                  );
-                }
-                if (state is HomeError) {
-                  return SizedBox(
-                    height: 300,
-                    child: Center(
-                      child: Text('Something went wrong \n ${state.error}'),
-                    ),
-                  );
-                }
-                return Container();
-              },
-            ),
-          ],
-        ),
+                      )
+                    ],
+                  ),
+                );
+        },
       ),
     );
   }
 }
 
-String formatDateTime(DateTime dateTime) {
-  String formattedDate = DateFormat('E, dd MMMM yyyy').format(dateTime);
-  return formattedDate;
+class CalendarView extends StatelessWidget {
+  const CalendarView({
+    super.key,
+    required EventController<Object?> controller,
+    required this.eventsToAdd,
+    required this.filteredTasks,
+  }) : _controller = controller;
+
+  final EventController<Object?> _controller;
+  final List<CalendarEventData<Object?>> eventsToAdd;
+  final List<Task> filteredTasks;
+
+  @override
+  Widget build(BuildContext context) {
+    return MonthView(
+      borderColor: Colors.white,
+      useAvailableVerticalSpace: true,
+
+      controller: _controller,
+      // to provide custom UI for month cells.
+      cellBuilder: (date, events, isToday, isInMonth, hi) {
+        // Return your widget to display as month cell.
+        return cellItemBuilder(isInMonth, date, events ,isToday);
+      },
+      borderSize: 0.2,
+      minMonth: DateTime(2020),
+      maxMonth: DateTime(2050),
+      initialMonth: DateTime.now(),
+      cellAspectRatio: 1,
+      onPageChange: (date, pageIndex) =>
+          // ignore: avoid_print
+          print("$date, $pageIndex"),
+      onCellTap: (events, date) {
+        List<Task?> subTasks = [];
+
+        filteredTasks.forEach((task) {
+          if (task.taskDeadline!.contains(date.toString().substring(0, 10))) {
+            print('true');
+            subTasks.add(task);
+          } else {
+            print('false');
+          }
+        });
+
+        _controller.addAll(eventsToAdd);
+        Navigator.of(context).push(
+          MaterialPageRoute(
+            builder: (context) => CellScreen(tasks: subTasks , date : date),
+          ),
+        );
+      },
+      
+      weekDayBuilder: (day) {
+        List days = ["M", "T", "W", "T", "F", "S", "S"];
+        return SizedBox(
+          height: 40,
+          child: Text(
+            days[day],
+            textAlign: TextAlign.center,
+            style: const TextStyle(
+              color: Colors.grey,
+              fontSize: 18,
+            ),
+          ),
+        );
+      },
+      startDay: WeekDays.sunday,
+      onDateLongPress: (date) => (date) {
+        //TODO: IMPLEMENT THIS IF NEEDED
+      },
+      headerStyle: const HeaderStyle(
+        headerTextStyle: TextStyle(
+          color: Colors.grey,
+          fontWeight: FontWeight.w800,
+          fontSize: 20,
+        ),
+        rightIcon: Icon(
+          Icons.navigate_next_rounded,
+          size: 30,
+          color: Colors.grey,
+        ),
+        leftIcon: Icon(
+          Icons.navigate_before_rounded,
+          color: Colors.grey,
+          size: 30,
+        ),
+        decoration: BoxDecoration(),
+      ),
+      showWeekTileBorder: false,
+    );
+  }
+
+  Container cellItemBuilder( 
+      bool isInMonth, DateTime date, List<CalendarEventData<Object?>> events , bool isToday,) {
+      
+    return Container(
+     decoration: BoxDecoration(
+       color: isInMonth ? Colors.black54 : Colors.grey.shade900,
+       border: isToday? Border.all(color: Colors.grey.shade400 , width: 3) : null,
+     ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+            Text(
+                cellFormatDateTime(date),
+                style: const TextStyle(color: Colors.grey),
+              ),
+          Column(
+            children: [
+            
+              Container(
+                padding: const EdgeInsets.symmetric(horizontal: 4),
+                height: 60,
+                child: SingleChildScrollView(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      ...events
+                          .map(
+                            (e) => Container(
+                              decoration: BoxDecoration(
+                                  color: e.color,
+                                  borderRadius: BorderRadius.circular(10)),
+                              padding: const EdgeInsets.symmetric(horizontal: 5),
+                              margin: const EdgeInsets.only(bottom: 2),
+                              child: Text(
+                                e.title,
+                                overflow: TextOverflow.ellipsis,
+                                maxLines: 1,
+                                style: const TextStyle(
+                                  color: Colors.black,
+                                  fontSize: 12,
+                                  fontWeight: FontWeight.w500,
+                                ),
+                              ),
+                            ),
+                          )
+                          .toList()
+                    ],
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
 }
 
-String dayInThreeLetters(DateTime dateTime) {
-  String formattedDate = DateFormat('E').format(dateTime);
-  return formattedDate;
-}
-
-String dayInNumbers(DateTime dateTime) {
+String cellFormatDateTime(DateTime dateTime) {
   String formattedDate = DateFormat('dd').format(dateTime);
+  return formattedDate;
+}
+
+String formatDateTime(DateTime dateTime) {
+  String formattedDate = DateFormat('MMMM , yyyy').format(dateTime);
   return formattedDate;
 }

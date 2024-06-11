@@ -2,8 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:logger/logger.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:todos/bloc/addtaskbloc/addtask_bloc.dart';
+import 'package:todos/bloc/agendabloc/agenda_bloc.dart';
 import 'package:todos/bloc/authbloc/auth_bloc.dart';
 import 'package:todos/bloc/homebloc/home_bloc.dart';
+import 'package:todos/data/repositpry/add_task_repo.dart';
+import 'package:todos/data/repositpry/agenda_repo.dart';
 import 'package:todos/data/repositpry/home_repo.dart';
 import 'package:todos/data/repositpry/user_repo.dart';
 import 'package:todos/presentation/pallets/app_colors.dart';
@@ -35,6 +39,9 @@ class MyApp extends StatelessWidget {
         RepositoryProvider<HomeRepository>(
           create: (context) => HomeRepository(),
         ),
+        RepositoryProvider<AddTaskRepository>(
+          create: (context) => AddTaskRepository(),
+        ),
       ],
       child: MultiBlocProvider(
         providers: [
@@ -47,7 +54,17 @@ class MyApp extends StatelessWidget {
             create: (context) => HomeBloc(
               taskRepository: RepositoryProvider.of<HomeRepository>(context),
             ),
-          )
+          ),
+           BlocProvider(
+            create: (context) => AgendaBloc(
+              agendaRepository: RepositoryProvider.of<AgendaRepository>(context),
+            ),
+          ),
+          BlocProvider(
+            create: (context) => AddtaskBloc(
+              addTaskRepository: RepositoryProvider.of<AddTaskRepository>(context),
+            ),
+          ),
         ],
         child: MaterialApp(
           theme: ThemeData(

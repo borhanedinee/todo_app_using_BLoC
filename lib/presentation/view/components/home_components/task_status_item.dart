@@ -20,20 +20,20 @@ class TaskStatusItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 80,
-      width: size.width * 0.45,
+      height: 70,
+      width: size.width * 0.43,
       decoration:
           BoxDecoration(color: color, borderRadius: BorderRadius.circular(20)),
       child: Row(
         children: [
           const SizedBox(
-            width: 20,
+            width: 15,
           ),
           CircleAvatar(
               backgroundColor: Colors.black.withOpacity(0.13),
               child: Icon(
                 icon,
-                size: 30,
+                size: 28,
                 color: Colors.white,
               )),
           const SizedBox(
@@ -48,11 +48,12 @@ class TaskStatusItem extends StatelessWidget {
                 style: const TextStyle(
                     color: Colors.black,
                     fontWeight: FontWeight.bold,
-                    fontSize: 16),
+                    fontSize: 14),
               ),
               Text('$numOfTasks tasks',
                   style: TextStyle(
                     color: Colors.grey.shade900,
+                    fontSize: 12
                   )),
             ],
           )

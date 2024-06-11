@@ -9,7 +9,7 @@ import 'package:todos/presentation/view/components/custom_text_field.dart';
 import 'package:todos/presentation/view/root.dart';
 
 class LogIn extends StatefulWidget {
-  LogIn({super.key});
+  const LogIn({super.key});
 
   @override
   State<LogIn> createState() => _LogInState();
@@ -19,6 +19,15 @@ class _LogInState extends State<LogIn> {
   late TextEditingController emailController;
   late TextEditingController passwordController;
   late GlobalKey<FormState> authKey;
+
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+    emailController.dispose();
+    passwordController.dispose();
+  }
   @override
   void initState() {
     super.initState();
@@ -101,7 +110,7 @@ class _LogInState extends State<LogIn> {
                       ),
                       CustomTextField(
                         passwordController: passwordController,
-                        hint: ' . . . . . . . . . . . . . . . ',
+                        hint: '* * * * * * * * * * * * *',
                         prefixIcon: Icons.key,
                         suffixIcon: IconButton(
                           onPressed: () {},
@@ -123,7 +132,7 @@ class _LogInState extends State<LogIn> {
                     onPressed: () {},
                     child: const Text(
                       'Forgot Passorwd?',
-                      style: TextStyle(color: Colors.purpleAccent),
+                      style: TextStyle(color: Colors.white),
                     ),
                   ),
                 )
@@ -203,6 +212,7 @@ class _LogInState extends State<LogIn> {
               child: BlocConsumer<AuthBloc, AuthState>(
                 listener: (context, state) {
                   if (state is AuthSuccess) {
+                    // successfull request but USER NOT FOUND
                     if (state.user == null) {
                       ScaffoldMessenger.of(context).showSnackBar(
                         SnackBar(
@@ -219,6 +229,7 @@ class _LogInState extends State<LogIn> {
 
                       ScaffoldMessenger.of(context).showSnackBar(
                         SnackBar(
+                          
                           content: Text(state.message),
                           backgroundColor: Colors.grey,
                         ),

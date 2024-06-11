@@ -18,7 +18,8 @@ class DefaultAppBar extends StatelessWidget {
           child: Text(
             title,
             style: const TextStyle(
-              fontSize: 26,
+              color: Colors.grey,
+              fontSize: 23,
               fontWeight: FontWeight.bold,
             ),
           ),
