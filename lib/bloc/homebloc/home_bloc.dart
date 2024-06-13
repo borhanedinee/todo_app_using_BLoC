@@ -28,10 +28,10 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
       emit(
         HomeLoaded(
           currentSortByStatus: 'Sort By',
-          onGoingCount: response['onGoingCount'],
-          inProgressCount: response['inProgressCount'],
-          pendingCount: response['pendingCount'],
-          completedCount: response['completedCount'],
+          weekly: response['weekly'],
+          monthly: response['monthly'],
+          deadlined: response['deadlined'],
+          allTasks: response['allTasks'],
           recentTaks: response['tasks'],
         ),
       );
@@ -46,7 +46,14 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
 
   FutureOr<void> sortByChanged(
       SortByChanged event, Emitter<HomeState> emit) async {
-    emit(SortbyLoading());
+    emit(SortbyLoading(
+      alltasks: event.alltasks,
+      deadlined: event.deadlined,
+      monthly: event.monthly,
+      weekly: event.weekly
+
+
+    ));
     await Future.delayed(const Duration(seconds: 3));
     //TODO: handle changedsort by event
     try {
@@ -54,10 +61,10 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
       emit(
         HomeLoaded(
           currentSortByStatus: event.sortBy,
-          onGoingCount: sortedTasks['onGoingCount'],
-          inProgressCount: sortedTasks['inProgressCount'],
-          pendingCount: sortedTasks['pendingCount'],
-          completedCount: sortedTasks['completedCount'],
+          monthly: sortedTasks['monthly'],
+          weekly: sortedTasks['weekly'],
+          deadlined: sortedTasks['deadlined'],
+          allTasks: sortedTasks['allTasks'],
           recentTaks: sortedTasks['tasks'],
         ),
       );

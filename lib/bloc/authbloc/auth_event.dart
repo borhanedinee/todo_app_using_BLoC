@@ -8,4 +8,6 @@ class LoginEvent extends AuthEvent {
   final String password;
 
   LoginEvent({required this.email, required this.password});
-} 
+}
+
+class GoogleLoginEvent extends AuthEvent {}

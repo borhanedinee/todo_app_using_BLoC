@@ -7,7 +7,14 @@ final class HomeInitial extends HomeState {}
 
 final class HomeLoading extends HomeState {}
 
-final class SortbyLoading extends HomeState {}
+final class SortbyLoading extends HomeState {
+  final int weekly;
+  final int monthly;
+  final int deadlined;
+  final int alltasks;
+
+  SortbyLoading({required this.weekly, required this.monthly, required this.deadlined, required this.alltasks});
+}
 final class DeletedTaskState extends HomeState {
   final String status;
 
@@ -15,20 +22,20 @@ final class DeletedTaskState extends HomeState {
 }
 
 final class HomeLoaded extends HomeState {
-  final int onGoingCount;
-  final int inProgressCount;
-  final int pendingCount;
-  final int completedCount;
+  final int weekly;
+  final int monthly;
+  final int deadlined;
+  final int allTasks;
 
   final String currentSortByStatus;
 
   final List<Task> recentTaks;
 
   HomeLoaded({
-    required this.onGoingCount,
-    required this.inProgressCount,
-    required this.pendingCount,
-    required this.completedCount,
+    required this.weekly,
+    required this.monthly,
+    required this.deadlined,
+    required this.allTasks,
     required this.recentTaks,
     required this.currentSortByStatus,
   });

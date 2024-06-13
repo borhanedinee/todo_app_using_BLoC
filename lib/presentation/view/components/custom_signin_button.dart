@@ -6,7 +6,7 @@ import 'package:todos/presentation/pallets/app_colors.dart';
 class CustomSignInButton extends StatelessWidget {
   final void Function()? onPressed;
 
-  final String child;
+  final Widget child;
 
   final String asset;
 
@@ -26,16 +26,13 @@ class CustomSignInButton extends StatelessWidget {
         onPressed: onPressed,
         style: const ButtonStyle(
             padding:
-                MaterialStatePropertyAll(EdgeInsets.symmetric(horizontal: 10)),
+                MaterialStatePropertyAll(EdgeInsets.symmetric(horizontal: 10 , vertical: 5)),
             backgroundColor: MaterialStatePropertyAll(
                 AppColors.signUpWithGoogleButtonColor)),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Text(
-              child,
-              style: const TextStyle(color: Colors.black),
-            ),
+            child,
             const SizedBox(
               width: 10,
             ),

@@ -37,7 +37,7 @@ class ProfileScreen extends StatelessWidget {
                             }
                             if (state is HomeLoaded) {
                               return Text(
-                                state.inProgressCount.toString(),
+                                state.monthly.toString(),
                                 style: const TextStyle(
                                     fontWeight: FontWeight.bold, fontSize: 16),
                               );
@@ -52,14 +52,20 @@ class ProfileScreen extends StatelessWidget {
                             return Container();
                           },
                         ),
-                        Text('In progress tasks',
+                        Text('Monthly tasks',
                             style: TextStyle(
                                 fontSize: 12, color: Colors.grey.shade200)),
                       ],
                     ),
-                    const CircleAvatar(
-                      radius: 50,
-                      backgroundImage: AssetImage('assets/images/boy.png'),
+                    CircleAvatar(
+                      radius: 51,
+                      backgroundColor: AppColors.primaryColor,
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(50),
+                        child: prefs.getBool('userfromgoogle')!
+                      ? Image.network(prefs.getString('useravatar')! , height: 100,)
+                      : Image.asset('assets/images/boy.png'),
+                      ),
                     ),
                     Column(
                       children: [
@@ -74,7 +80,7 @@ class ProfileScreen extends StatelessWidget {
                             }
                             if (state is HomeLoaded) {
                               return Text(
-                                state.completedCount.toString(),
+                                state.deadlined.toString(),
                                 style: const TextStyle(
                                     fontWeight: FontWeight.bold, fontSize: 16),
                               );
@@ -89,7 +95,7 @@ class ProfileScreen extends StatelessWidget {
                             return Container();
                           },
                         ),
-                        Text('Completed tasks',
+                        Text('Deadlined tasks',
                             style: TextStyle(
                                 fontSize: 12, color: Colors.grey.shade200)),
                       ],

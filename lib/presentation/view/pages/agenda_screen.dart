@@ -4,7 +4,6 @@ import 'package:intl/intl.dart';
 import 'package:todos/data/repositpry/home_repo.dart';
 import 'package:todos/domain/models/task.dart';
 import 'package:todos/main.dart';
-import 'package:todos/presentation/pallets/app_colors.dart';
 import 'package:todos/presentation/view/components/custom_appbar.dart';
 import 'package:todos/presentation/view/pages/cell_screen.dart';
 
@@ -44,7 +43,6 @@ class _AgendaScreenState extends State<AgendaScreen> {
               return CalendarEventData(
                   title: task.taskTitle!,
                   date:  DateTime.parse(task.taskDeadline!),
-                  endDate: DateTime.tryParse('2024-06-14'),
                   startTime: DateTime(0,0,0,17,00),
                   color: switch (task.taskCategory!.toLowerCase()) {
                     'studying' => Colors.indigo,
@@ -190,7 +188,7 @@ class CalendarView extends StatelessWidget {
         children: [
             Text(
                 cellFormatDateTime(date),
-                style: const TextStyle(color: Colors.grey),
+                style:  TextStyle(color: isInMonth? Colors.white : Colors.grey.shade600),
               ),
           Column(
             children: [

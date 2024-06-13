@@ -1,4 +1,4 @@
 class Constants {
-  static const baseUrl = 'http://10.0.2.2:3000';
+  static const baseUrl = 'http://192.168.8.103:3000';
 }
 

@@ -22,33 +22,30 @@ class HomeRepository {
     try {
       List response = await TaskAPI.fetchTask(userId);
       List<Task> tasks = response.map((e) => Task.fromJson(e)).toList();
-      var onGoingCount = 0;
-      var completedCount = 0;
-      var inProgoressCount = 0;
-      var pendingCount = 0;
+      var weekly = 0;
+      var monthly = 0;
+      var deadlined = 0;
+      var allTasks = tasks.length;
       for (Task task in tasks) {
         switch (task.taskStatus!.toLowerCase()) {
-          case 'on going':
-            onGoingCount += 1;
+          case 'weekly':
+            weekly += 1;
             break;
-          case 'completed':
-            completedCount += 1;
+          case 'monthly':
+            monthly += 1;
             break;
-          case 'pending':
-            pendingCount += 1;
-            break;
-          case 'in progress':
-            inProgoressCount += 1;
+          case 'deadlined':
+            deadlined += 1;
             break;
           default:
             null;
         }
       }
       return {
-        'pendingCount': pendingCount,
-        'onGoingCount': onGoingCount,
-        'completedCount': completedCount,
-        'inProgressCount': inProgoressCount,
+        'weekly': weekly,
+        'monthly': monthly,
+        'deadlined': deadlined,
+        'allTasks': allTasks,
         'tasks': tasks
       };
     } catch (e) {
@@ -62,33 +59,30 @@ class HomeRepository {
       List response = await TaskAPI.sortTask(sortBy);
 
       List<Task> tasks = response.map((e) => Task.fromJson(e)).toList();
-      var onGoingCount = 0;
-      var completedCount = 0;
-      var inProgoressCount = 0;
-      var pendingCount = 0;
+      var weekly = 0;
+      var monthly = 0;
+      var deadlined = 0;
+      var allTasks = tasks.length;
       for (Task task in tasks) {
         switch (task.taskStatus!.toLowerCase()) {
-          case 'on going':
-            onGoingCount += 1;
+          case 'weekly':
+            weekly += 1;
             break;
-          case 'completed':
-            completedCount += 1;
+          case 'monthly':
+            monthly += 1;
             break;
-          case 'pending':
-            pendingCount += 1;
-            break;
-          case 'in progress':
-            inProgoressCount += 1;
+          case 'deadlined':
+            deadlined += 1;
             break;
           default:
             null;
         }
       }
       return {
-        'pendingCount': pendingCount,
-        'onGoingCount': onGoingCount,
-        'completedCount': completedCount,
-        'inProgressCount': inProgoressCount,
+        'weekly': weekly,
+        'monthly': monthly,
+        'deadlined': deadlined,
+        'allTasks': allTasks,
         'tasks': tasks
       };
     } catch (e) {

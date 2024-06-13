@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:todos/main.dart';
 
 class CustomAppBar extends StatelessWidget {
   final String user;
@@ -13,8 +14,13 @@ class CustomAppBar extends StatelessWidget {
         children: [
           Row(
             children: [
-              const CircleAvatar(
-                backgroundImage: AssetImage('assets/images/boy.png'),
+              CircleAvatar(
+                child: prefs.getBool('userfromgoogle')!
+                    ? ClipRRect(
+                      borderRadius: BorderRadius.circular(50),
+                      
+                      child: Image.network(prefs.getString('useravatar')!))
+                    : Image.asset('assets/images/boy.png'),
               ),
               const SizedBox(
                 width: 20,
@@ -25,15 +31,13 @@ class CustomAppBar extends StatelessWidget {
                   Text(
                     'Hi, $user',
                     style: const TextStyle(
-                        color: Colors.grey,
+                        color: Colors.white,
                         fontSize: 18,
                         fontWeight: FontWeight.bold),
                   ),
                   const Text(
                     'Your daily adventure starts now',
-                    style: TextStyle(
-                      fontSize: 12,
-                    color: Colors.grey),
+                    style: TextStyle(fontSize: 12, color: Colors.grey),
                   )
                 ],
               ),

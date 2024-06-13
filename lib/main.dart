@@ -12,6 +12,7 @@ import 'package:todos/data/repositpry/home_repo.dart';
 import 'package:todos/data/repositpry/user_repo.dart';
 import 'package:todos/presentation/pallets/app_colors.dart';
 import 'package:todos/presentation/view/pages/get_started.dart';
+import 'package:todos/presentation/view/pages/login_screen.dart';
 
 late SharedPreferences prefs; 
 
@@ -87,7 +88,7 @@ class MyApp extends StatelessWidget {
               colorScheme: const ColorScheme.dark(
                   primary: AppColors.primaryColor, background: Colors.black)),
           debugShowCheckedModeBanner: false,
-          home: const GetStarted(),
+          home: const LogIn(),
         ),
       ),
     );

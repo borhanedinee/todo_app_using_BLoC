@@ -1,11 +1,14 @@
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:todos/bloc/authbloc/auth_bloc.dart';
 import 'package:todos/bloc/homebloc/home_bloc.dart';
+import 'package:todos/data/network/google_login_api.dart';
 import 'package:todos/main.dart';
 import 'package:todos/presentation/pallets/app_colors.dart';
 import 'package:todos/presentation/view/components/custom_signin_button.dart';
 import 'package:todos/presentation/view/components/custom_text_field.dart';
+import 'package:todos/presentation/view/pages/signup_screen.dart';
 import 'package:todos/presentation/view/root.dart';
 
 class LogIn extends StatefulWidget {
@@ -20,7 +23,6 @@ class _LogInState extends State<LogIn> {
   late TextEditingController passwordController;
   late GlobalKey<FormState> authKey;
 
-
   @override
   void dispose() {
     // TODO: implement dispose
@@ -28,6 +30,7 @@ class _LogInState extends State<LogIn> {
     emailController.dispose();
     passwordController.dispose();
   }
+
   @override
   void initState() {
     super.initState();
@@ -53,7 +56,7 @@ class _LogInState extends State<LogIn> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 const Text(
-                  'Create an account 🖐',
+                  'Welcome back 🖐',
                   style: TextStyle(
                     fontSize: 26,
                     fontWeight: FontWeight.bold,
@@ -63,7 +66,7 @@ class _LogInState extends State<LogIn> {
                   height: 10,
                 ),
                 Text(
-                  'Please register on our SteamLine, where you can continue using our services.',
+                  'Please log in to our SteamLine, where you can continue using our services.',
                   style: TextStyle(color: Colors.grey.shade300),
                 )
               ],
@@ -166,9 +169,44 @@ class _LogInState extends State<LogIn> {
             height: 10,
           ),
           CustomSignInButton(
-            onPressed: () {},
+            onPressed: () async {
+              authBloc.add(GoogleLoginEvent());
+              // var userFromGoogle = await GoogleLogin.login();
+            },
             asset: 'assets/images/google.png',
-            child: 'Sign in with google',
+            child: BlocConsumer<AuthBloc, AuthState>(
+              listener: (context, state) {
+                if (state is GoogleLoginSuccess) {
+                  ScaffoldMessenger.of(context)
+                      .showSnackBar(SnackBar(content: Text('Signed in as ${state.user.userUsername!}')));
+
+                  prefs.setBool('userfromgoogle', true);
+                  prefs.setInt('userid', state.user.userId!);
+                  prefs.setString('username', state.user.userUsername!);
+                  prefs.setString('email', state.user.userEmail!);
+                  prefs.setString('password', state.user.userPassword!);
+                  prefs.setString('useravatar', state.user.userAvatar!);
+
+                  homeBloc.add(
+                        FetchHomeDataEvent(userId: prefs.getInt('userid')!),
+                      );
+
+                  Navigator.of(context).push(MaterialPageRoute(
+                    builder: (context) => RootScreen(),
+                  ));
+                }
+                if (state is GoogleLoginFailed) {
+                  ScaffoldMessenger.of(context)
+                      .showSnackBar(SnackBar(content: Text(state.message)));
+                }
+              },
+              builder: (context, state) {
+                if (state is GoogleLoginLoading) {
+                  return const CircularProgressIndicator();
+                }
+                return const Text('Sign in with google');
+              },
+            ),
           ),
           const SizedBox(
             height: 10,
@@ -176,7 +214,7 @@ class _LogInState extends State<LogIn> {
 
           CustomSignInButton(
               onPressed: () {},
-              child: 'Sign up with Facebook',
+              child: const Text('Sign up with Facebook'),
               asset: 'assets/images/facebook.png'),
           const SizedBox(
             height: 50,
@@ -184,7 +222,7 @@ class _LogInState extends State<LogIn> {
           Container(
             height: 70,
             width: MediaQuery.of(context).size.width,
-            padding: const EdgeInsets.symmetric(horizontal: 20),
+            padding: const EdgeInsets.symmetric(horizontal: 20 , vertical: 0),
             child: ElevatedButton(
               onPressed: () {
                 if (authKey.currentState!.validate()) {
@@ -198,7 +236,7 @@ class _LogInState extends State<LogIn> {
               },
               style: ButtonStyle(
                 padding: const MaterialStatePropertyAll(
-                  EdgeInsets.symmetric(vertical: 20),
+                  EdgeInsets.symmetric(vertical: 15),
                 ),
                 backgroundColor:
                     const MaterialStatePropertyAll(AppColors.primaryColor),
@@ -218,7 +256,6 @@ class _LogInState extends State<LogIn> {
                         SnackBar(
                           content: Text(state.message),
                           backgroundColor: Colors.grey,
-
                         ),
                       );
                     } else {
@@ -229,7 +266,6 @@ class _LogInState extends State<LogIn> {
 
                       ScaffoldMessenger.of(context).showSnackBar(
                         SnackBar(
-                          
                           content: Text(state.message),
                           backgroundColor: Colors.grey,
                         ),
@@ -269,6 +305,44 @@ class _LogInState extends State<LogIn> {
                 },
               ),
             ),
+          ),
+          SizedBox(
+            height: 20,
+          ),
+          Center(
+            child: RichText(text: TextSpan(
+              children: [
+                TextSpan(
+                  text: 'Don\'t have an account? ',
+                  style: const TextStyle(
+                    color: Colors.white,
+                  ),
+                  recognizer: TapGestureRecognizer()
+                   ..onTap = () {
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (context) => const SignUpScreen(),
+                        ),
+                      );
+                    },
+                ),
+                TextSpan(
+                  text: 'Sign up',
+                  style: const TextStyle(
+                    color: AppColors.primaryColor,
+                    fontWeight: FontWeight.bold,
+                  ),
+                  recognizer: TapGestureRecognizer()
+                   ..onTap = () {
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (context) => const SignUpScreen(),
+                        ),
+                      );
+                    },
+                ),
+              ]
+            )),
           ),
           const SizedBox(
             height: 50,

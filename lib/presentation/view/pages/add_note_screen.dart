@@ -19,6 +19,7 @@ class _AddNoteScreenState extends State<AddNoteScreen> {
   final _formKey = GlobalKey<FormState>();
 
   var deadlineController = TextEditingController();
+  var monthDateController = TextEditingController();
 
   var taskTitleController = TextEditingController();
 
@@ -36,7 +37,7 @@ class _AddNoteScreenState extends State<AddNoteScreen> {
     'Studying',
     'Coding',
     'Self dev',
-    '9adya',
+    'Healthcare',
     'Meeting',
     'Others'
   ];
@@ -58,12 +59,11 @@ class _AddNoteScreenState extends State<AddNoteScreen> {
   ];
 
   String? selectedCategory;
-  String? selectedStatus = 'Weekly';
+  String? selectedStatus = '';
 
   bool isStatusNotSelected = false;
   bool isCategoryNotSelected = false;
-
-  bool titleValidated = false;
+  
   @override
   Widget build(BuildContext context) {
     final homeBloc = BlocProvider.of<HomeBloc>(context);
@@ -87,21 +87,21 @@ class _AddNoteScreenState extends State<AddNoteScreen> {
             ),
             Expanded(
               child: SingleChildScrollView(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const Padding(
-                      padding: EdgeInsets.only(left: 20, bottom: 30),
-                      child: Text(
-                        'New Task',
-                        style: TextStyle(
-                            fontSize: 30, fontWeight: FontWeight.bold),
+                child: Form(
+                  key: _formKey,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const Padding(
+                        padding: EdgeInsets.only(left: 20, bottom: 30),
+                        child: Text(
+                          'New Task',
+                          style: TextStyle(
+                              fontSize: 30, fontWeight: FontWeight.bold),
+                        ),
                       ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(left: 15, right: 15),
-                      child: Form(
-                        key: _formKey,
+                      Padding(
+                        padding: const EdgeInsets.only(left: 15, right: 15),
                         child: Column(
                           children: [
                             TextFormField(
@@ -142,343 +142,359 @@ class _AddNoteScreenState extends State<AddNoteScreen> {
                           ],
                         ),
                       ),
-                    ),
-                    Padding(
-                      padding:
-                          const EdgeInsets.only(left: 20, bottom: 20, top: 15),
-                      child: RichText(
-                        text: TextSpan(
-                          children: [
-                            const TextSpan(
-                              text: 'Status ',
-                              style: TextStyle(
-                                  fontFamily: 'Bai Jamjuree',
-                                  fontWeight: FontWeight.w500,
-                                  fontSize: 18),
-                            ),
-                            if (isStatusNotSelected)
+                      Padding(
+                        padding: const EdgeInsets.only(
+                            left: 20, bottom: 20, top: 15),
+                        child: RichText(
+                          text: TextSpan(
+                            children: [
                               const TextSpan(
-                                text: ' status is required',
+                                text: 'Status ',
                                 style: TextStyle(
                                     fontFamily: 'Bai Jamjuree',
-                                    color: Colors.red),
+                                    fontWeight: FontWeight.w500,
+                                    fontSize: 18),
                               ),
-                          ],
+                              if (isStatusNotSelected)
+                                const TextSpan(
+                                  text: ' status is required',
+                                  style: TextStyle(
+                                      fontFamily: 'Bai Jamjuree',
+                                      color: Colors.red),
+                                ),
+                            ],
+                          ),
                         ),
                       ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(
-                          left: 12, right: 20, bottom: 20),
-                      child: Wrap(
-                        children: statusList.map((status) {
-                          return FittedBox(
-                            child: GestureDetector(
-                              onTap: () {
-                                // Handle category selection here
-                                setState(() {
-                                  selectedStatus = status;
-                                });
-                              },
-                              child: Container(
-                                padding: const EdgeInsets.all(10),
-                                margin: const EdgeInsets.only(
-                                    left: 8, right: 8, bottom: 8),
-                                decoration: BoxDecoration(
-                                  color: selectedStatus == status
-                                      ? Colors.grey.shade900
-                                      : switch (status) {
-                                          'Weekly' => Colors.indigo,
-                                          'Monthly' => Colors.teal,
-                                          'Deadlined' => Colors.cyan,
-                                          String() => null,
-                                        },
-                                  border: selectedStatus == status
-                                      ? Border.all(
-                                          width: 2, color: Colors.white)
-                                      : null,
-                                  borderRadius: BorderRadius.circular(10),
+                      Padding(
+                        padding: const EdgeInsets.only(
+                            left: 12, right: 20, bottom: 20),
+                        child: Wrap(
+                          children: statusList.map((status) {
+                            return FittedBox(
+                              child: GestureDetector(
+                                onTap: () {
+                                  // Handle category selection here
+                                  setState(() {
+                                    selectedStatus = status;
+                                  });
+                                },
+                                child: Container(
+                                  padding: const EdgeInsets.all(10),
+                                  margin: const EdgeInsets.only(
+                                      left: 8, right: 8, bottom: 8),
+                                  decoration: BoxDecoration(
+                                    color: selectedStatus == status
+                                        ? Colors.grey.shade900
+                                        : switch (status) {
+                                            'Weekly' => Colors.indigo,
+                                            'Monthly' => Colors.teal,
+                                            'Deadlined' => Colors.cyan,
+                                            String() => null,
+                                          },
+                                    border: selectedStatus == status
+                                        ? Border.all(
+                                            width: 2, color: Colors.white)
+                                        : null,
+                                    borderRadius: BorderRadius.circular(10),
+                                  ),
+                                  child: Center(
+                                      child: Text(
+                                    status,
+                                    style: const TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 16),
+                                  )),
                                 ),
-                                child: Center(
-                                    child: Text(
-                                  status,
+                              ),
+                            );
+                          }).toList(),
+                        ),
+                      ),
+                      selectedStatus == 'Weekly'
+                          ? Padding(
+                              padding: const EdgeInsets.only(
+                                  left: 12, right: 20, bottom: 20),
+                              child: Wrap(
+                                children: daysOfWeek.map((day) {
+                                  return FittedBox(
+                                    child: GestureDetector(
+                                      onTap: () {
+                                        // Handle category selection here
+
+                                        selectedDays.contains(day)
+                                            ? selectedDays.remove(day)
+                                            : selectedDays.add(day);
+                                        setState(() {});
+                                      },
+                                      child: Container(
+                                        padding: const EdgeInsets.all(8),
+                                        margin: const EdgeInsets.only(
+                                            left: 8, right: 8, bottom: 8),
+                                        decoration: BoxDecoration(
+                                          color: selectedDays.contains(day)
+                                              ? Colors.grey.shade900
+                                              : Colors.grey[800],
+                                          border: selectedDays.contains(day)
+                                              ? Border.all(
+                                                  width: 1, color: Colors.white)
+                                              : null,
+                                          borderRadius:
+                                              BorderRadius.circular(10),
+                                        ),
+                                        child: Center(child: Text(day)),
+                                      ),
+                                    ),
+                                  );
+                                }).toList(),
+                              ),
+                            )
+                          : selectedStatus == 'Monthly'
+                              ? Padding(
+                                  padding: const EdgeInsets.only(
+                                      left: 15, right: 15, bottom: 30),
+                                  child: TextFormField(
+                                    controller: monthDateController,
+                                    readOnly: true,
+                                    decoration: InputDecoration(
+                                      contentPadding:
+                                          const EdgeInsets.symmetric(
+                                              vertical: 12, horizontal: 10),
+                                      border: OutlineInputBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(20)),
+                                      hintText: 'Repetitive date',
+                                      suffixIcon: IconButton(
+                                        onPressed: () async {
+                                          DateTime dateTime =
+                                              await showOmniDateTimePicker(
+                                                      context: context) ??
+                                                  DateTime.now();
+                                          setState(
+                                            () {
+                                              monthDateController.text =
+                                                  dateTimeToString(dateTime) ??
+                                                      '';
+                                            },
+                                          );
+                                        },
+                                        icon: const Icon(
+                                            Icons.keyboard_arrow_down),
+                                      ),
+                                    ),
+                                    validator: (value) {
+                                      if (value == '') {
+                                        return 'Date is required';
+                                      }
+                                      return null;
+                                    },
+                                  ),
+                                )
+                              : selectedStatus == 'Deadlined'
+                                  ? Padding(
+                                      padding: const EdgeInsets.only(
+                                          left: 15, right: 15, bottom: 30),
+                                      child: TextFormField(
+                                        validator: (value) {
+                                          if (value == '') {
+                                            return 'Deadline is required';
+                                          }
+                                          return null;
+                                          
+                                        },
+                                        controller: deadlineController,
+                                        readOnly: true,
+                                        decoration: InputDecoration(
+                                          contentPadding:
+                                              const EdgeInsets.symmetric(
+                                                  vertical: 12, horizontal: 10),
+                                          border: OutlineInputBorder(
+                                              borderRadius:
+                                                  BorderRadius.circular(20)),
+                                          hintText: 'Deadline',
+                                          suffixIcon: IconButton(
+                                            onPressed: () async {
+                                              DateTime dateTime =
+                                                  await showOmniDateTimePicker(
+                                                          context: context) ??
+                                                      DateTime.now();
+                                              setState(
+                                                () {
+                                                  deadlineController.text =
+                                                      dateTimeToString(
+                                                              dateTime) ??
+                                                          '';
+                                                },
+                                              );
+                                            },
+                                            icon: const Icon(
+                                                Icons.keyboard_arrow_down),
+                                          ),
+                                        ),
+                                      ),
+                                    )
+                                  : Container(),
+                      Padding(
+                        padding: const EdgeInsets.only(left: 20, bottom: 20),
+                        child: RichText(
+                          text: TextSpan(
+                            children: [
+                              const TextSpan(
+                                text: 'Categories ',
+                                style: TextStyle(
+                                    fontFamily: 'Bai Jamjuree',
+                                    fontWeight: FontWeight.w500,
+                                    fontSize: 18),
+                              ),
+                              if (isCategoryNotSelected)
+                                const TextSpan(
+                                  text: ' category is required',
                                   style: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 16),
-                                )),
+                                    color: Colors.red,
+                                    fontFamily: 'Bai Jamjuree',
+                                  ),
+                                ),
+                            ],
+                          ),
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(
+                            left: 12, right: 20, bottom: 20),
+                        child: Wrap(
+                          children: categories.map((category) {
+                            return FittedBox(
+                              child: GestureDetector(
+                                onTap: () {
+                                  // Handle category selection here
+                                  setState(() {
+                                    selectedCategory = category;
+                                  });
+                                },
+                                child: Container(
+                                  padding: const EdgeInsets.all(8),
+                                  margin: const EdgeInsets.only(
+                                      left: 8, right: 8, bottom: 8),
+                                  decoration: BoxDecoration(
+                                    color: selectedCategory == category
+                                        ? Colors.grey.shade900
+                                        : Colors.grey[800],
+                                    border: selectedCategory == category
+                                        ? Border.all(
+                                            width: 2, color: Colors.white)
+                                        : null,
+                                    borderRadius: BorderRadius.circular(10),
+                                  ),
+                                  child: Center(child: Text(category)),
+                                ),
+                              ),
+                            );
+                          }).toList(),
+                        ),
+                      ),
+                      Container(
+                        width: size.width,
+                        padding: const EdgeInsets.only(bottom: 30),
+                        margin: const EdgeInsets.only(right: 20, left: 20),
+                        child: ElevatedButton(
+                          onPressed: () async {
+                            if (selectedStatus == '') {
+                              setState(() {
+                                isStatusNotSelected = true;
+                              });
+                            } else {
+                              setState(() {
+                                isStatusNotSelected = false;
+                              });
+                            }
+                            if (selectedCategory == null) {
+                              isCategoryNotSelected = true;
+                            } else {
+                              setState(() {
+                                isCategoryNotSelected = false;
+                              });
+                            }
+
+                            if (_formKey.currentState!.validate() &&
+                                !isCategoryNotSelected &&
+                                statusList.contains(selectedStatus)) {
+                              // do your stuff here
+                              addtaskbloc.add(AddingTaskEvent(
+                                  task: Task(
+                                      taskCategory: selectedCategory,
+                                      taskDeadline: selectedStatus == 'Monthly'
+                                          ? monthDateController.text
+                                          : selectedStatus == 'Deadlined'
+                                              ? deadlineController.text
+                                              : DateTime.now()
+                                                  .add(const Duration(days: 10))
+                                                  .toString(),
+                                      taskDetails: taskDetailsController.text,
+                                      taskStatus: selectedStatus,
+                                      taskTitle: taskTitleController.text,
+                                      taskUser: prefs.getInt('userid')),
+                                  selectedDays: selectedDays));
+                            } else {
+                              logger
+                                  .e('things are not validated for submission');
+                            }
+                          },
+                          style: ButtonStyle(
+                            padding: const MaterialStatePropertyAll(
+                              EdgeInsets.symmetric(vertical: 17),
+                            ),
+                            backgroundColor: const MaterialStatePropertyAll(
+                                AppColors.primaryColor),
+                            elevation: const MaterialStatePropertyAll(5),
+                            shape: MaterialStatePropertyAll(
+                              RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(10),
                               ),
                             ),
-                          );
-                        }).toList(),
-                      ),
-                    ),
-                    selectedStatus == null || selectedStatus == 'Weekly'
-                        ? Padding(
-                            padding: const EdgeInsets.only(
-                                left: 12, right: 20, bottom: 20),
-                            child: Wrap(
-                              children: daysOfWeek.map((day) {
-                                return FittedBox(
-                                  child: GestureDetector(
-                                    onTap: () {
-                                      // Handle category selection here
-
-                                      selectedDays.contains(day)
-                                          ? selectedDays.remove(day)
-                                          : selectedDays.add(day);
-                                      setState(() {});
-                                    },
-                                    child: Container(
-                                      padding: const EdgeInsets.all(8),
-                                      margin: const EdgeInsets.only(
-                                          left: 8, right: 8, bottom: 8),
-                                      decoration: BoxDecoration(
-                                        color: selectedDays.contains(day)
-                                            ? Colors.grey.shade900
-                                            : Colors.grey[800],
-                                        border: selectedDays.contains(day)
-                                            ? Border.all(
-                                                width: 1, color: Colors.white)
-                                            : null,
-                                        borderRadius: BorderRadius.circular(10),
-                                      ),
-                                      child: Center(child: Text(day)),
-                                    ),
+                          ),
+                          child: BlocConsumer<AddtaskBloc, AddtaskState>(
+                            listener: (context, state) {
+                              if (state is AddTaskError) {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  const SnackBar(
+                                    content: Text(
+                                        'Something went wrong, please try again'),
                                   ),
                                 );
-                              }).toList(),
-                            ),
-                          )
-                        : selectedStatus == 'Monthly'
-                            ? Padding(
-                                padding: const EdgeInsets.only(
-                                    left: 15, right: 15, bottom: 30),
-                                child: TextFormField(
-                                  controller: deadlineController,
-                                  readOnly: true,
-                                  decoration: InputDecoration(
-                                    contentPadding: const EdgeInsets.symmetric(
-                                        vertical: 12, horizontal: 10),
-                                    border: OutlineInputBorder(
-                                        borderRadius:
-                                            BorderRadius.circular(20)),
-                                    hintText: 'Repetitive date',
-                                    suffixIcon: IconButton(
-                                      onPressed: () async {
-                                        DateTime dateTime =
-                                            await showOmniDateTimePicker(
-                                                    context: context) ??
-                                                DateTime.now();
-                                        setState(
-                                          () {
-                                            deadlineController.text =
-                                                dateTimeToString(dateTime) ??
-                                                    '';
-                                          },
-                                        );
-                                      },
-                                      icon:
-                                          const Icon(Icons.keyboard_arrow_down),
-                                    ),
+                              }
+                              if (state is AddTaskSuccess) {
+                                homeBloc.add(
+                                  FetchHomeDataEvent(
+                                      userId: prefs.getInt('userid')!),
+                                );
+                                Navigator.of(context).pop();
+                                //TODO: HANDLE NAVIGATION TO HOME PAGE AFTER ADDING TASK
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  const SnackBar(
+                                    content: Text('Task added successfully'),
                                   ),
-                                ),
-                              )
-                            : Padding(
-                                padding: const EdgeInsets.only(
-                                    left: 15, right: 15, bottom: 30),
-                                child: TextFormField(
-                                  controller: deadlineController,
-                                  readOnly: true,
-                                  decoration: InputDecoration(
-                                    contentPadding: const EdgeInsets.symmetric(
-                                        vertical: 12, horizontal: 10),
-                                    border: OutlineInputBorder(
-                                        borderRadius:
-                                            BorderRadius.circular(20)),
-                                    hintText: 'Deadline',
-                                    suffixIcon: IconButton(
-                                      onPressed: () async {
-                                        DateTime dateTime =
-                                            await showOmniDateTimePicker(
-                                                    context: context) ??
-                                                DateTime.now();
-                                        setState(
-                                          () {
-                                            deadlineController.text =
-                                                dateTimeToString(dateTime) ??
-                                                    '';
-                                          },
-                                        );
-                                      },
-                                      icon:
-                                          const Icon(Icons.keyboard_arrow_down),
-                                    ),
-                                  ),
-                                ),
-                              ),
-                    Padding(
-                      padding: const EdgeInsets.only(left: 20, bottom: 20),
-                      child: RichText(
-                        text: TextSpan(
-                          children: [
-                            const TextSpan(
-                              text: 'Categories ',
-                              style: TextStyle(
-                                  fontFamily: 'Bai Jamjuree',
-                                  fontWeight: FontWeight.w500,
-                                  fontSize: 18),
-                            ),
-                            if (isCategoryNotSelected)
-                              const TextSpan(
-                                text: ' category is required',
-                                style: TextStyle(
-                                  color: Colors.red,
-                                  fontFamily: 'Bai Jamjuree',
-                                ),
-                              ),
-                          ],
-                        ),
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(
-                          left: 12, right: 20, bottom: 20),
-                      child: Wrap(
-                        children: categories.map((category) {
-                          return FittedBox(
-                            child: GestureDetector(
-                              onTap: () {
-                                // Handle category selection here
-                                setState(() {
-                                  selectedCategory = category;
-                                });
-                              },
-                              child: Container(
-                                padding: const EdgeInsets.all(8),
-                                margin: const EdgeInsets.only(
-                                    left: 8, right: 8, bottom: 8),
-                                decoration: BoxDecoration(
-                                  color: selectedCategory == category
-                                      ? Colors.grey.shade900
-                                      : Colors.grey[800],
-                                  border: selectedCategory == category
-                                      ? Border.all(
-                                          width: 2, color: Colors.white)
-                                      : null,
-                                  borderRadius: BorderRadius.circular(10),
-                                ),
-                                child: Center(child: Text(category)),
-                              ),
-                            ),
-                          );
-                        }).toList(),
-                      ),
-                    ),
-                    Container(
-                      width: size.width,
-                      padding: const EdgeInsets.only(bottom: 30),
-                      margin: const EdgeInsets.only(right: 20, left: 20),
-                      child: ElevatedButton(
-                        onPressed: () async {
-                          if (selectedStatus == null) {
-                            setState(() {
-                              isStatusNotSelected = true;
-                            });
-                          } else {
-                            setState(() {
-                              isStatusNotSelected = false;
-                            });
-                          }
-                          if (selectedCategory == null) {
-                            isCategoryNotSelected = true;
-                          } else {
-                            setState(() {
-                              isCategoryNotSelected = false;
-                            });
-                          }
-                          if (_formKey.currentState!.validate()) {
-                            setState(() {
-                              titleValidated = true;
-                            });
-                          } else {
-                            setState(() {
-                              titleValidated = false;
-                            });
-                          }
-
-                          if (titleValidated &&
-                              !isCategoryNotSelected &&
-                              !isStatusNotSelected) {
-                            // do your stuff here
-                            addtaskbloc.add(AddingTaskEvent(
-                                task: Task(
-                                    taskCategory: selectedCategory,
-                                    taskDeadline: deadlineController.text,
-                                    taskDetails: taskDetailsController.text,
-                                    taskStatus: selectedStatus,
-                                    taskTitle: taskTitleController.text,
-                                    taskUser: prefs.getInt('userid')),
-                                selectedDays: selectedDays));
-                          } else {
-                            logger.e('things are not validated for submission');
-                            logger.i(selectedDays.toString());
-                          }
-                        },
-                        style: ButtonStyle(
-                          padding: const MaterialStatePropertyAll(
-                            EdgeInsets.symmetric(vertical: 17),
-                          ),
-                          backgroundColor: const MaterialStatePropertyAll(
-                              AppColors.primaryColor),
-                          elevation: const MaterialStatePropertyAll(5),
-                          shape: MaterialStatePropertyAll(
-                            RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(10),
-                            ),
+                                );
+                              }
+                            },
+                            builder: (context, state) {
+                              if (state is AddTaskLoading) {
+                                return const CircularProgressIndicator(
+                                  color: Colors.white,
+                                );
+                              } else {
+                                return const Text(
+                                  'Create',
+                                  style: TextStyle(
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.bold),
+                                );
+                              }
+                            },
                           ),
                         ),
-                        child: BlocConsumer<AddtaskBloc, AddtaskState>(
-                          listener: (context, state) {
-                            if (state is AddTaskError) {
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                const SnackBar(
-                                  content: Text(
-                                      'Something went wrong, please try again'),
-                                ),
-                              );
-                            }
-                            if (state is AddTaskSuccess) {
-                              homeBloc.add(
-                                FetchHomeDataEvent(
-                                    userId: prefs.getInt('userid')!),
-                              );
-                              Navigator.of(context).pop();
-                              //TODO: HANDLE NAVIGATION TO HOME PAGE AFTER ADDING TASK
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                const SnackBar(
-                                  content: Text('Task added successfully'),
-                                ),
-                              );
-                            }
-                          },
-                          builder: (context, state) {
-                            if (state is AddTaskLoading) {
-                              return const CircularProgressIndicator(
-                                color: Colors.white,
-                              );
-                            } else {
-                              return const Text(
-                                'Create',
-                                style: TextStyle(
-                                    color: Colors.white,
-                                    fontWeight: FontWeight.bold),
-                              );
-                            }
-                          },
-                        ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               ),
             ),
